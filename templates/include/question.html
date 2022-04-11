@@ -10,7 +10,7 @@
 
     </div>
     <div class="col-md-10 col-lg-10">
-        <h3><a href="../question.html" class="text-dark">{{ question.title }}</a></h3>
+        <h3><a href="{% url "question" question.number %}" class="text-dark">{{ question.title }}</a></h3>
         <p>{{ question.text }}</p>
     </div>
 

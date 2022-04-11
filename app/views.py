@@ -6,6 +6,7 @@ QUESTIONS = [
     {
         "title": f"Title #{i}",
         "text": f" This if text for question #{i}",
+        "number": i,
     } for i in range(4)
 ]
 
@@ -15,3 +16,7 @@ def index(request):
 
 def ask(request):
     return render(request, "ask.html")
+
+
+def question(request, i: int):
+    return render(request, "question_page.html", {"question": QUESTIONS[i]})

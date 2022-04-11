@@ -1,363 +1,237 @@
-<!doctype html>
-<html lang="en" class="h-100">
+{% extends "include/base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8">
-    <title>SegFault</title>
-    <link rel="shortcut icon" href="static/img/short_logo.ico">
+{% block type_work %}
+{% include "include/authorized.html" %}
+{% endblock type_work %}
 
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/css/main.css">
 
-    <link rel="stylesheet" href="sticky-footer-navbar.css">
-</head>
+{% block content %}
+<h2 class="mt-5">Question</h2>
 
-<body class="d-flex flex-column h-100">
+{% include "include/question.html" %}
 
-<header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="templates/index.html">SegFault</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="templates/ask.html">New qestion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">My questions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">About</a>
-                    </li>
-                </ul>
-                <form class="d-flex search-input navbar-not-autorised">
-                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+<hr class="answer-hr">
+<h3><a href="question_page.html" class="text-decoration-none text-dark">2 answers</a></h3>
 
-                <a href="authorization.html" class="btn btn-outline-secondary log-in-btn">Log in</a>
-                <a href="registration.html" class="btn btn-outline-secondary">Sign up</a>
-            </div>
-        </div>
-    </nav>
-</header>
+<div class="row answer-best">
 
-<!-- Begin page content -->
-<main class="flex-shrink-0">
-    <div class="container">
-        <div class="row">
-            <div class="col-10">
-                <h2 class="mt-5">Question</h2>
+    <div class="col-2">
+        <img class="avatar-question" src="../static/img/top-answer.jpg" alt>
 
-                <div class="row">
-                    <div class="col-2">
-                        <img class="avatar-question-inter" src="static/img/3.jpg">
-
-                        <a class="btn"> <b>votes :</b>&nbsp 10</a>
-                        <a class="btn btn-outline-success"> <b>answers:</b>&nbsp 5</a>
-                        <a class="btn"> <b>views:</b>&nbsp 75</a>
-
-                    </div>
-                    <div class="col-10">
-                        <h3><a href="question_page.html" class="text-dark answer-text">How to enter the technopark</a>
-                        </h3>
-                        <p class="answer-text">Heard that this is the best place for a good start in IT. Is it necessary
-                            to do? And How?
-                        </p>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="btn likes-buttons">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                                     class="bi bi-chevron-double-up" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                          d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
-                                    <path fill-rule="evenodd"
-                                          d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                                </svg>
-                            </div>
-
-                            <span class="text-success">25</span>
-
-                            <div class="btn likes-buttons">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                                     class="bi bi-chevron-double-down" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                          d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                    <path fill-rule="evenodd"
-                                          d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                </svg>
-                            </div>
-                            <span class="text-danger">13</span>
-
-                        </div>
-
-                        <div class="col-4 btn author-label">
-                <span>
-                  <p> <b>Author:</b>&nbsp <a href="userpage.html">user@mail.ru</a> </p>
-                </span>
-                        </div>
-
-                        <div class="col-5">
-                            <div class="container">
-                                <a class="btn"> <b>Tags:</b></a>
-                                <a href="templates/index.html" class="btn btn-link">Tag1</a>
-                                <a href="templates/index.html" class="btn btn-link">Tag2</a>
-                                <a href="templates/index.html" class="btn btn-link">Tag3</a>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <hr class="answer-hr">
-                <h3><a href="question_page.html" class="text-decoration-none text-dark">2 answers</a></h3>
-
-                <div class="row answer-best">
-
-                    <div class="col-2">
-                        <img class="avatar-question" src="static/img/top-answer.jpg" alt>
-
-                        <div class="btn answer-best-check">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="green"
-                                 class="bi bi-check"
-                                 viewBox="0 0 16 16">
-                                <path
-                                        d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                            </svg>
-                        </div>
-
-                    </div>
-                    <div class="col-10">
-                        <p class="answer-text">Yes, this is the best place, do your best and in a year you will see an
-                            excellent result, you need to prepare hard every day.</p>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="btn likes-buttons">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                                     class="bi bi-chevron-double-up" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                          d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
-                                    <path fill-rule="evenodd"
-                                          d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                                </svg>
-                            </div>
-
-                            <span class="text-success">25</span>
-
-                            <div class="btn likes-buttons">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                                     class="bi bi-chevron-double-down" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                          d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                    <path fill-rule="evenodd"
-                                          d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                </svg>
-                            </div>
-                            <span class="text-danger">13</span>
-
-                        </div>
-
-                        <div class="col-4 btn author-label-best">
-                <span>
-                  <p> <b>Author:</b>&nbsp <a href="userpage.html">user@mail.ru</a> </p>
-                </span>
-                        </div>
-
-                        <div class="col-5">
-                            <div class="container">
-                                <a class="btn"> <b>Tags:</b></a>
-                                <a href="templates/index.html" class="btn btn-link">Tag1</a>
-                                <a href="templates/index.html" class="btn btn-link">Tag2</a>
-                                <a href="templates/index.html" class="btn btn-link">Tag3</a>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="row answer">
-                    <div class="col-2">
-                        <img class="avatar-question" src="static/img/answer.jpg" alt>
-                    </div>
-                    <div class="col-10">
-                        <p class="answer-text">DO IT!</p>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="btn likes-buttons">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                                     class="bi bi-chevron-double-up" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                          d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
-                                    <path fill-rule="evenodd"
-                                          d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                                </svg>
-                            </div>
-
-                            <span class="text-success">25</span>
-
-                            <div class="btn likes-buttons">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                                     class="bi bi-chevron-double-down" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                          d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                    <path fill-rule="evenodd"
-                                          d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                </svg>
-                            </div>
-                            <span class="text-danger">13</span>
-
-                        </div>
-
-                        <div class="col-4 btn author-label-answer">
-                <span>
-                  <p> <b>Author:</b>&nbsp <a href="userpage.html">user@mail.ru</a> </p>
-                </span>
-                        </div>
-
-                        <div class="col-5">
-                            <div class="container">
-                                <a class="btn answer-tags"> <b>Tags:</b></a>
-                                <a href="templates/index.html" class="btn btn-link">Tag1</a>
-                                <a href="templates/index.html" class="btn btn-link">Tag2</a>
-                                <a href="templates/index.html" class="btn btn-link">Tag3</a>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <hr class="answer-hr">
-
-                <form>
-                    <div class="mb-3 question-textarea-text">
-                        <label for="exampleFormControlTextarea1" class="form-label">Your answer</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Notify me of responses by mail</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary mb-5">Post your answer</button>
-                </form>
-
-            </div>
-            <div class="col-2">
-                <h2 class="mt-5">Tags</h2>
-                <div class="btn-group-vertical">
-                    <div class="btn-group">
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">Python</a>
-                        </div>
-
-                        <div class="tags-buttons tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">C++</a>
-                        </div>
-
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">Qt</a>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">C#</a>
-                        </div>
-
-                        <div class="tags-buttons tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">JS</a>
-                        </div>
-
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">Go</a>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">C</a>
-                        </div>
-
-                        <div class="tags-buttons tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">Pascal</a>
-                        </div>
-
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">Rust</a>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">1C</a>
-                        </div>
-
-                        <div class="tags-buttons tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">Rudy</a>
-                        </div>
-
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="templates/index.html" class="btn btn-success">TypeScript</a>
-                        </div>
-                    </div>
-
-                    <h2 class="mt-5">Best members</h2>
-                    <div class="tags-buttons">
-                        <a href="templates/index.html" class="link-info">Bogdan007</a>
-                    </div>
-
-                    <div class="tags-buttons">
-                        <a href="templates/index.html" class="link-info">Avenger303</a>
-                    </div>
-                    <div class="tags-buttons">
-                        <a href="templates/index.html" class="link-info">Bomonec373</a>
-                    </div>
-
-                    <div class="tags-buttons">
-                        <a href="templates/index.html" class="link-info">MC_Gogozik</a>
-                    </div>
-
-                    <div class="tags-buttons">
-                        <a href="templates/index.html" class="link-info">More people</a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-
-        <div class="">
-            <a class="btn change-page" href="/<link>" rel="next" title="Go to page 2"> Prev</a>
-            <div class="btn change-page">1</div>
-            <a class="btn change-page" href="/<link>" rel="" title="Go to page 2">2</a>
-            <a class="btn change-page" href="/<link>" rel="" title="Go to page 3">3</a>
-            <a class="btn change-page" href="/<link>" rel="" title="Go to page 4">4</a>
-            <a class="btn change-page" href="/<link>" rel="" title="Go to page 5">5</a>
-            <span class="fs-2"> ....</span>
-            <a class="btn change-page" href="/<link>" rel="" title="Go to page 50703">222</a>
-            <a class="btn change-page" href="/<link>" rel="next" title="Go to page 2"> Next</a>
+        <div class="btn answer-best-check">
+            <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="green"
+                 class="bi bi-check"
+                 viewBox="0 0 16 16">
+                <path
+                        d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+            </svg>
         </div>
 
     </div>
-</footer>
+    <div class="col-10">
+        <p class="answer-text">Yes, this is the best place, do your best and in a year you will see an
+            excellent result, you need to prepare hard every day.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <div class="btn likes-buttons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+                     class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
+                    <path fill-rule="evenodd"
+                          d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                </svg>
+            </div>
+
+            <span class="text-success">25</span>
+
+            <div class="btn likes-buttons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+                     class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    <path fill-rule="evenodd"
+                          d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </div>
+            <span class="text-danger">13</span>
+
+        </div>
+
+        <div class="col-4 btn author-label-best">
+                <span>
+                  <p> <b>Author:</b>&nbsp <a href="userpage.html">user@mail.ru</a> </p>
+                </span>
+        </div>
+
+        <div class="col-5">
+            <div class="container">
+                <a class="btn"> <b>Tags:</b></a>
+                <a href="index.html" class="btn btn-link">Tag1</a>
+                <a href="index.html" class="btn btn-link">Tag2</a>
+                <a href="index.html" class="btn btn-link">Tag3</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row answer">
+    <div class="col-2">
+        <img class="avatar-question" src="../static/img/answer.jpg" alt>
+    </div>
+    <div class="col-10">
+        <p class="answer-text">DO IT!</p>
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <div class="btn likes-buttons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+                     class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
+                    <path fill-rule="evenodd"
+                          d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                </svg>
+            </div>
+
+            <span class="text-success">25</span>
+
+            <div class="btn likes-buttons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+                     class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    <path fill-rule="evenodd"
+                          d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </div>
+            <span class="text-danger">13</span>
+
+        </div>
+
+        <div class="col-4 btn author-label-answer">
+                <span>
+                  <p> <b>Author:</b>&nbsp <a href="userpage.html">user@mail.ru</a> </p>
+                </span>
+        </div>
+
+        <div class="col-5">
+            <div class="container">
+                <a class="btn answer-tags"> <b>Tags:</b></a>
+                <a href="index.html" class="btn btn-link">Tag1</a>
+                <a href="index.html" class="btn btn-link">Tag2</a>
+                <a href="index.html" class="btn btn-link">Tag3</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<hr class="answer-hr">
+
+<form>
+    <div class="mb-3 question-textarea-text">
+        <label for="exampleFormControlTextarea1" class="form-label">Your answer</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Notify me of responses by mail</label>
+    </div>
+    <button type="submit" class="btn btn-primary mb-5">Post your answer</button>
+</form>
+{% endblock content %}
+
+
+{% block side_panel %}
+<h1 class="mt-5 text-center">Popular Tags</h1>
+<div class="btn-group-vertical">
+
+    <div class="btn-group">
+        <div class="tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">Python</a>
+        </div>
+
+        <div class="tags-buttons tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">C++</a>
+        </div>
+
+        <div class="tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">Qt</a>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <div class="tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">C#</a>
+        </div>
+
+        <div class="tags-buttons tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">JS</a>
+        </div>
+
+        <div class="tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">Go</a>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <div class="tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">C</a>
+        </div>
+
+        <div class="tags-buttons tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">Pascal</a>
+        </div>
+
+        <div class="tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">Rust</a>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <div class="tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">1C</a>
+        </div>
+
+        <div class="tags-buttons tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">Rudy</a>
+        </div>
+
+        <div class="tags-buttons btn-group-lg">
+            <a href="templates/index.html" class="btn btn-success">TypeScript</a>
+        </div>
+    </div>
+
+    <h1 class="mt-5 text-center">Best members</h1>
+    <div class="tags-buttons">
+        <a href="templates/index.html" class="link-info">Bogdan007</a>
+    </div>
+
+    <div class="tags-buttons">
+        <a href="templates/index.html" class="link-info">Avenger303</a>
+    </div>
+    <div class="tags-buttons">
+        <a href="templates/index.html" class="link-info">Bomonec373</a>
+    </div>
+
+    <div class="tags-buttons">
+        <a href="templates/index.html" class="link-info">MC_Gogozik</a>
+    </div>
+
+    <div class="tags-buttons">
+        <a href="templates/index.html" class="link-info">More people</a>
+    </div>
+</div>
+{% endblock side_panel %}
 
 
 </body>
-
 </html>
