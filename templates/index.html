@@ -13,7 +13,7 @@
             <h2 class="mt-5">New Questions</h2>
         </div>
         <div class="col-md-2 col-lg-2">
-            <a href="index.html" class="btn btn-link mt-5">Hot Question</a>
+            <a href="{% url "index" %}" class="btn btn-link mt-5">Hot Question</a>
         </div>
     </div>
 
@@ -26,6 +26,7 @@
 
 {% block side_panel %}
 {% include "include/popular_tags.html" %}
+{% include "include/best_members.html" %}
 {% endblock side_panel %}
 
 {% block pages %}

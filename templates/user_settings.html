@@ -1,58 +1,13 @@
-<!doctype html>
-<html lang="en" class="h-100">
-<head>
-    <meta charset="utf-8">
-    <title>Askme</title>
-    <link rel="shortcut icon" href="../static/img/logo.png">
+{% extends "include/base.html" %}
+{% load static %}
 
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/main.css">
 
-    <link href="sticky-footer-navbar.css" rel="stylesheet">
-</head>
-<body class="d-flex flex-column h-100">
+{% block type_work %}
+{% include "include/authorized.html" %}
+{% endblock type_work %}
 
-<header>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Askme</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="ask.html">New question</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">My questions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">About</a>
-                    </li>
-                </ul>
-                <form class="d-flex search-input navbar-not-autorised">
-                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-
-                <img class="avatar" src="../static/img/3.jpg">
-                <a class="btn btn-outline-secondary log-in-btn">MC_Gogozik</a>
-                <a href="login.html" class="btn btn-outline-secondary log-in-btn">Log in</a>
-                <a href="sign_up.html" class="btn btn-outline-secondary">Settings</a>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<!-- Begin page content -->
-<main class="flex-shrink-0">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9 col-lg-9">
-                <div class="form-signin">
+{% block content %}
+<div class="form-signin">
                     <div class="row">
                         <div class="col-4">
                             <img class="mt-4 mb-4 img-thumbnail avatar-settings" src="../static/img/3.jpg">
@@ -137,96 +92,9 @@
                         </button>
                     </div>
                 </div>
-            </div>
+{% endblock content %}
 
-
-            <div class="col-md-3 col-lg-3">
-                <h1 class="mt-5">Tags</h1>
-                <div class="btn-group-vertical">
-
-                    <div class="btn-group">
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">Python</a>
-                        </div>
-
-                        <div class="tags-buttons tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">C++</a>
-                        </div>
-
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">Qt</a>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">C#</a>
-                        </div>
-
-                        <div class="tags-buttons tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">JS</a>
-                        </div>
-
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">Go</a>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">C</a>
-                        </div>
-
-                        <div class="tags-buttons tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">Pascal</a>
-                        </div>
-
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">Rust</a>
-                        </div>
-                    </div>
-
-                    <div class="btn-group">
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">1C</a>
-                        </div>
-
-                        <div class="tags-buttons tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">Rudy</a>
-                        </div>
-
-                        <div class="tags-buttons btn-group-lg">
-                            <a href="index.html" class="btn btn-success">TypeScript</a>
-                        </div>
-                    </div>
-
-                    <h2 class="mt-5">Best members</h2>
-                    <div class="tags-buttons">
-                        <a href="index.html" class="link-info">Bogdan007</a>
-                    </div>
-
-                    <div class="tags-buttons">
-                        <a href="index.html" class="link-info">Avenger303</a>
-                    </div>
-                    <div class="tags-buttons">
-                        <a href="index.html" class="link-info">Bomonec373</a>
-                    </div>
-
-                    <div class="tags-buttons">
-                        <a href="index.html" class="link-info">MC_Gogozik</a>
-                    </div>
-
-                    <div class="tags-buttons">
-                        <a href="index.html" class="link-info">More people</a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    </div>
-</main>
-
-</body>
-</html>
-
+{% block side_panel %}
+{% include "include/popular_tags.html" %}
+{% include "include/best_members.html" %}
+{% endblock side_panel %}
