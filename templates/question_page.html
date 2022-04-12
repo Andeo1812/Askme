@@ -12,16 +12,14 @@
 {% include "include/question.html" %}
 
 <hr class="answer-hr">
-<h3><a href="question_page.html" class="text-decoration-none text-dark">2 answers</a></h3>
+<h3><a class="text-decoration-none text-dark">2 answers</a></h3>
 
 {% for answer in answers %}
     {% include "include/answer.html" %}
 {% endfor %}
 
-
-<hr class="answer-hr">
 <form>
-    <div class="mb-3 question-textarea-text">
+    <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Your answer</label>
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
     </div>

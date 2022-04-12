@@ -85,18 +85,18 @@ main > .container {
 }
 
 .answer {
-    border: 3px solid black;
+    border: 3px solid gray;
     border-radius: 5px;
     margin: 20px;
     padding: 10px;
 }
 
-.answer-best {
-    border: 3px solid green;
+.tags {
+    border: 1px solid black;
     border-radius: 5px;
-    margin: 20px;
-    padding: 10px;
+    margin-left: 20px;
 }
+
 
 .settings-nick-field {
     width: 240px;
@@ -135,5 +135,14 @@ main > .container {
 .load_avatar {
     margin-top: 20px;
     margin-left: 150px;
+}
+
+.author-label {
+  margin-left: -50px;
+}
+
+.tags {
+    width: 400px;
+    margin-left: -20px;
 }
 

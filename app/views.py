@@ -50,7 +50,6 @@ ANSWERS.append({
     "text": "Yes, this is the best place, do your best and in a year you will see an excellent result, you need to prepare hard every day.",
     "tag1": "Python",
     "tag2": "Patterns",
-    "tag3": "IO"
 })
 
 NAME_TAGS = {
