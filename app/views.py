@@ -20,3 +20,10 @@ def ask(request):
 
 def question(request, i: int):
     return render(request, "question_page.html", {"question": QUESTIONS[i]})
+
+
+def login(request):
+    return render(request, "login.html")
+
+def signup(request):
+    return render(request, "signup.html")

@@ -1,0 +1,39 @@
+{% extends "include/base.html" %}
+{% load static %}
+
+
+{% block type_work %}
+{% include "include/unauthorized.html" %}
+{% endblock type_work %}
+
+{% block content %}
+<div class="text-center">
+    <form>
+    <img class="mb-4 login_margin" src="../static/img/logo.png" alt="" width="72" height="57">
+    <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
+
+    <div class="form-floating login">
+        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating login">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" class= value="remember-me"> Remember me
+        </label>
+    </div>
+    <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+</form>
+</div>
+{% endblock content %}
+
+{% block side_panel %}
+{% include "include/popular_tags.html" %}
+{% endblock side_panel %}
+
+
