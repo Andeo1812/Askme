@@ -9,7 +9,7 @@
 {% block content %}
 <div class="text-center">
     <form>
-        <img class="mb-4 login_margin" src="{% static " img/logo.png" %}" alt="" width="72" height="57">
+        <img class="mb-4 login_margin" src="{% static "img/logo.png" %}" alt="" width="72" height="57">
         <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
 
         <div class="form-floating login">
@@ -26,15 +26,12 @@
                 <input type="checkbox" class=value="remember-me"> Remember me
             </label>
         </div>
-        <button class="btn btn-lg btn-primary" type="submit">Log in</button>
+        <a href="{% url "new" %}" class="btn btn-lg btn-primary">Log in</a>
 
-        <div class="checkbox mb-3">
-            <label>
-            <input type="checkbox" class=value="remember-me"> First rime?
-            </label>
+        <div class="mt-5">
+            <a href="{% url "signup" %}" class="btn btn-lg btn-primary">Sign up</a>
         </div>
 
-        <button href="{% url "signup" %}" class="btn btn-lg btn-primary" type="submit">Sign in</button>
         <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
     </form>
 </div>
