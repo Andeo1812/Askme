@@ -6,19 +6,19 @@ from django.utils import timezone
 
 
 class TagManager(models.Manager):
-    def top_tags(self, count=10):
+    def top_tags(self, count=9):
         return self.annotate(count=Count('tag_related')).order_by('-count')[:count]
 
 
 class AnswerManager(models.Manager):
     def hot(self):
-        res = self.annotate(likes=Sum('answer_like__mark')).order_by('-likes').exclude(likes=None)
+        res = self.annotate(likes=Sum('answer_like__mark_l')).order_by('-likes').exclude(likes=None)
         if res.count() < 3:
-            res = self.annotate(likes=Sum('answer_like__mark')).order_by('-likes')
+            res = self.annotate(likes=Sum('answer_like__mark_l')).order_by('-likes')
         return res
 
     def answer_by_question(self, id):
-        return self.annotate(likes=Sum('answer_like__mark')).order_by('-likes').filter(question_id=id)
+        return self.annotate(likes=Sum('answer_like__mark_l')).order_by('-likes').filter(question_id=id)
 
 
 class QuestionManager(models.Manager):
@@ -26,9 +26,9 @@ class QuestionManager(models.Manager):
         return self.annotate(answers=Count('answer_related', distinct=True))
 
     def count_likes(self):
-        res = self.count_answers().annotate(likes=Sum('question_like__mark')).order_by('-likes').exclude(likes=None)
+        res = self.count_answers().annotate(likes=Sum('question_like__mark_l')).order_by('-likes').exclude(likes=None)
         if res.count() < 3:
-            res = self.count_answers().annotate(likes=Sum('question_like__mark')).order_by('-likes')
+            res = self.count_answers().annotate(likes=Sum('question_like__mark_l')).order_by('-likes')
         return res
 
     def get_by_id(self, id):
@@ -119,9 +119,6 @@ class Answer(models.Model):
 
     objects = AnswerManager()
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = "Answer"
         verbose_name_plural = "Answers"
@@ -129,21 +126,21 @@ class Answer(models.Model):
 
 
 class LikeQuestion(models.Model):
-    UPP = '1'
-    DOWN = '-1'
+    LIKE = '1'
+    DISLIKE = '-1'
 
-    LIKE = [
-        (UPP, 'Like'),
-        (DOWN, 'UnLike'),
+    MARK_L = [
+        (LIKE, 'Like'),
+        (DISLIKE, 'UnLike'),
     ]
-    DISLIKE = [
-        (UPP, 'DisLike'),
-        (DOWN, 'UnDislike')
+    MARK_D = [
+        (LIKE, 'DisLike'),
+        (DISLIKE, 'UnDislike')
     ]
 
-    mark_l = models.IntegerField(choices=LIKE)
+    mark_l = models.IntegerField(choices=MARK_L, blank=True, null=True)
 
-    mark_d = models.IntegerField(choices=DISLIKE)
+    mark_d = models.IntegerField(choices=MARK_D, blank=True, null=True)
 
     question = models.ForeignKey(Question, related_name="question_like", on_delete=models.CASCADE)
 
@@ -158,20 +155,21 @@ class LikeQuestion(models.Model):
 
 
 class LikeAnswer(models.Model):
-    UPP = '1'
-    DOWN = '-1'
+    LIKE = '1'
+    DISLIKE = '-1'
 
-    LIKE = [
-        (UPP, 'Like'),
-        (DOWN, 'UnLike'),
+    MARK_L = [
+        (LIKE, 'Like'),
+        (DISLIKE, 'UnLike'),
     ]
-    DISLIKE = [
-        (UPP, 'DisLike'),
-        (DOWN, 'UnDislike')
+    MARK_D = [
+        (LIKE, 'DisLike'),
+        (DISLIKE, 'UnDislike')
     ]
-    mark_l = models.IntegerField(choices=LIKE)
 
-    mark_d = models.IntegerField(choices=DISLIKE)
+    mark_l = models.IntegerField(choices=MARK_L, blank=True, null=True)
+
+    mark_d = models.IntegerField(choices=MARK_D, blank=True, null=True)
 
     answer = models.ForeignKey(Answer, related_name="answer_like", on_delete=models.CASCADE)
 

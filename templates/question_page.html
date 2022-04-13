@@ -12,11 +12,10 @@
 {% include "include/question.html" %}
 
 <hr class="answer-hr">
-<h3><a class="text-decoration-none text-dark">2 answers</a></h3>
 
-{% for answer in answers %}
-    {% include "include/answer.html" %}
-{% endfor %}
+    {% for answer in page_object.object_list %}
+        {% include "include/answer.html" %}
+    {% endfor %}
 
 <form>
     <div class="mb-3">
@@ -29,4 +28,6 @@
     </div>
     <button type="submit" class="btn btn-primary mb-5">Post your answer</button>
 </form>
+
+{% include "include/pagination.html" %}
 {% endblock content %}

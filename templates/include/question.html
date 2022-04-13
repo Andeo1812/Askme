@@ -67,26 +67,22 @@
                     0
                 {% else %}
                     {{ question.dislikes }}
-                {% endif %}}
+                {% endif %}
             </span>
 
         </div>
 
-        <div class="col-4 btn author-label">
-                <span>
-                  <p> <b>Author:</b>&nbsp <a href="userpage.html">{{ question.author }}</a> </p>
-                </span>
+        <div class="col-4">
+            <p><b>Author:</b> &nbsp<a href="###########">{{ question.profile }}</a> </p>
         </div>
 
         <div class="col-5">
-            <div class="container">
-                <a class="btn"> <b>Tags:</b></a>
-                {% for tag in question.tags %}
+            <a><b>Tags:</b></a>
+                {% for tag in question.tags.all %}
                     {% include "include/tags.html" %}
                 {% endfor %}
-            </div>
-
         </div>
 
+        <a class="btn"> <b>date:</b>&nbsp{{ question.pub_date }}</a>
     </div>
 </div>

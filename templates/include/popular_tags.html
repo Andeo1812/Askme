@@ -1,14 +1,14 @@
+{% load filters %}
+
 {%  load static %}
 
 <h1 class="mt-5 text-center">Popular Tags</h1>
 {% for tag in popular_tags %}
-{% if forloop.counter0|is_newline == True %}
 <div class="btn-group-vertical">
-
     <div class="btn-group">
         <div class="tags-buttons btn-group-lg">
             <a href="{% url "tag" tag=tag %}" class="btn btn-success"> {{ tag }}</a>
         </div>
-        {% endif %}
     </div>
 </div>
+{% endfor %}

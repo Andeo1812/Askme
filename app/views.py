@@ -18,7 +18,7 @@ def index(request):
 
 def hot(request):
     questions = Question.objects.hot()
-    content = paginator.paginate(questions, request, 3)
+    content = paginator.paginate(questions, request, 10)
     content.update({
         "category": "Best questions",
         "forward_category": "New question",
@@ -50,7 +50,7 @@ def question(request, question_id):
     return render(request, "question_page.html", content)
 
 
-def tag(request, name: str):
+def tag(request, tag):
     try:
         tags = Question.objects.by_tag(tag)
     except Exception:
@@ -81,6 +81,6 @@ def signup(request):
 
 
 def user_settings(request):
-    return render(request, 'settings.html', {"key": "authorized", 'popular_tags': Tag.objects.top_tags(), 'best_members': users})
+    return render(request, 'user_settings.html', {"key": "authorized", 'popular_tags': Tag.objects.top_tags(), 'best_members': users})
 
 

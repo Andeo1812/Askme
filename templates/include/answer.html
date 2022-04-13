@@ -49,15 +49,15 @@
 
         <div class="col-4 btn">
             <span>
-                  <p> <b>Author:</b>&nbsp <a href="#################">{{ answer.author }}</a> </p>
+                  <p> <b>Author:</b>&nbsp <a href="#################">{{ answer.profile }}</a> </p>
                 </span>
         </div>
 
         <div class="col-5">
             <div class="container">
                 <a class="btn"> <b>Tags:</b></a>
-                {% for tag in answer.tags %}
-                   {% include "include/tags.html" %}
+                {% for tag in question.tags.all %}
+                    {% include "include/tags.html" %}
                 {% endfor %}
             </div>
 
