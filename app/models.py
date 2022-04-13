@@ -52,7 +52,7 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to="", default='static/img/200.png')
+    avatar = models.ImageField(upload_to="", default='static/img/1.png')
 
     objects = ProfileManager()
 
@@ -114,6 +114,8 @@ class Answer(models.Model):
     profile = models.ForeignKey(Profile, related_name='profile_related', on_delete=models.CASCADE)
 
     question = models.ForeignKey(Question, related_name='answer_related', on_delete=models.CASCADE)
+
+    tags = models.ManyToManyField(Tag, related_name='tag_related_a')
 
     objects = AnswerManager()
 
