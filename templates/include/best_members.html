@@ -1,21 +1,8 @@
 {%  load static %}
 
 <h1 class="mt-5 text-center">Best members</h1>
+{% for user in best_members %}
 <div class="tags-buttons">
-    <a href="##################" class="link-info">{{ members.0 }}</a>
+    <a href="##################" class="link-info">{{ user.user }}</a>
 </div>
-
-<div class="tags-buttons">
-    <a href="##################" class="link-info">{{ members.1 }}</a>
-</div>
-<div class="tags-buttons">
-    <a href="##################" class="link-info">{{ members.2 }}</a>
-</div>
-
-<div class="tags-buttons">
-    <a href="##################" class="link-info">{{ members.3 }}</a>
-</div>
-
-<div class="tags-buttons">
-    <a href="##################" class="link-info">More people</a>
-</div>
+{% endfor %}

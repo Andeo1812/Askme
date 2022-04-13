@@ -1,7 +1,6 @@
 {%  load static %}
 
 <header>
-    <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url "index" %}">Askme</a>
@@ -9,17 +8,13 @@
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url "ask" %}">New question</a>
+                        <a class="nav-link active" aria-current="page" href="{% url "ask" %}">Ask question</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#######################">My questions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">About</a>
-                    </li>
+
                 </ul>
                 <form class="d-flex search-input navbar-not-autorised">
                     <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
@@ -28,6 +23,9 @@
 
                 <img class="avatar" src="{% static "img/2.jpg" %}">
                 <a class="btn btn-outline-secondary log-in-btn">MC_Gogozik</a>
+
+                <a href="{% url "user_settings" %}" class="btn btn-outline-secondary log-in-btn">Settings</a>
+
                 <a href="{% url "login" %}" class="btn btn-outline-secondary log-in-btn">Log out</a>
             </div>
         </div>

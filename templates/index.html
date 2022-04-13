@@ -10,25 +10,24 @@
 <div class="row">
     <div class="row">
         <div class="col-md-4 col-lg-4">
-            <h2 class="mt-5">New Questions</h2>
+            <h2 class="mt-5">{{ category }}</h2>
         </div>
         <div class="col-md-2 col-lg-2">
-            <a href="{% url "index" %}" class="btn btn-link mt-5">Hot Question</a>
+            {% if redirect_new %}
+                <a href="{% url "new" %}">
+            {% else %}
+                <a href="{% url "hot" %}">
+            {% endif %}
+            {{ forward_category }}
+            </a>
         </div>
     </div>
 
-    {% for question in questions %}
-    {% include "include/question.html" %}
+    {% for question in page_object.object_list %}
+       {% include "include/question.html" %}
     {% endfor %}
 
 </div>
+
+{% include "include/pagination.html" %}
 {% endblock content %}
-
-{% block side_panel %}
-{% include "include/popular_tags.html" %}
-{% include "include/best_members.html" %}
-{% endblock side_panel %}
-
-{% block pages %}
-{% include "include/pages.html" %}
-{% endblock pages %}

@@ -4,9 +4,28 @@
     <div class="col-2">
         <img class="avatar-question" src="{% static "img/1.jpg" %}">
 
-        <a class="btn"> <b>votes:</b>&nbsp {{ question.votes }}</a>
-        <a href="{% url "question" question.id %}" class="btn btn-outline-success"> <b>answers:</b>&nbsp {{ question.answers }}</a>
-        <a class="btn"> <b>views:</b>&nbsp {{ question.views }}</a>
+        <a class="btn"> <b>votes:</b>&nbsp
+            {% if question.votes == None %}
+                0
+            {% else %}
+                {{ question.votes }}
+            {% endif %}
+        </a>
+
+        <a href="{% url "question" question.id %}" class="btn btn-outline-success"> <b>answers:</b>&nbsp
+            {% if question.answers == None %}
+                0
+            {% else %}
+                {{ question.answers }}
+            {% endif %}</a>
+
+        <a class="btn"> <b>views:</b>&nbsp
+            {% if question.views == None %}
+                0
+            {% else %}
+                {{ question.views }}
+            {% endif %}
+        </a>
 
     </div>
     <div class="col-md-10 col-lg-10">
@@ -26,7 +45,13 @@
                 </svg>
             </div>
 
-            <span class="text-success">{{ question.likes }}</span>
+            <span class="text-success">
+                {% if question.likes == None %}
+                    0
+                {% else %}
+                    {{ question.likes }}
+                {% endif %}
+            </span>
 
             <div class="btn likes-buttons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
@@ -37,7 +62,13 @@
                           d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                 </svg>
             </div>
-            <span class="text-danger">{{ question.dislikes }}</span>
+            <span class="text-danger">
+                {% if question.dislikes == None %}
+                    0
+                {% else %}
+                    {{ question.dislikes }}
+                {% endif %}}
+            </span>
 
         </div>
 
@@ -50,9 +81,9 @@
         <div class="col-5">
             <div class="container">
                 <a class="btn"> <b>Tags:</b></a>
-                <a href="{% url "tag" question.tag1 %}" class="btn btn-link">{{ question.tag1 }}</a>
-                <a href="{% url "tag" question.tag2 %}" class="btn btn-link">{{ question.tag2 }}</a>
-                <a href="{% url "tag" question.tag3 %}" class="btn btn-link">{{ question.tag3 }}</a>
+                {% for tag in question.tags %}
+                    {% include "include/tags.html" %}
+                {% endfor %}
             </div>
 
         </div>

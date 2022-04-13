@@ -17,7 +17,6 @@
 {% block type_work %}
 {% endblock type_work %}
 
-<!-- Begin page content -->
 <main class="flex-shrink-0">
     <div class="container">
         <div class="row">
@@ -28,15 +27,14 @@
 
             <div class="col-md-3 col-lg-3">
                 {% block side_panel %}
+                    {% include "include/popular_tags.html" %}
+                    {% include "include/best_members.html" %}
                 {% endblock side_panel %}
             </div>
         </div>
     </div>
 </main>
 
-{% block pages %}
-{% endblock pages %}
-
+<script src="{% static "js/bootstrap.bundle.min.js" %}"></script>
 </body>
 </html>
-

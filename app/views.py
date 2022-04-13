@@ -1,111 +1,86 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from app.models import *
+import paginator
 
-# Create your views here.
-QUESTIONS = []
-for i in range(10):
-    QUESTIONS.append({
-        "title": "title " + str(i),
-        "id": i,
-        "views": i * 2,
-        "votes": i,
-        "likes": i * 3,
-        "dislikes": i,
-        "answers": i * 2,
-        "author": "test@mail.com",
-        "text": "text" + str(i) + "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
-                                  "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud"
-                                  " exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-                                  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore"
-                                  " eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in"
-                                  " culpa qui officia deserunt mollit anim id est laborum1.",
-        "tag1": "Python",
-        "tag2": "C++",
-        "tag3": "JS"
-    })
-
-ANSWERS = []
-ANSWERS.append({
-    "title": "title " + str(i),
-    "id": 32,
-    "views": 123,
-    "votes": 123,
-    "likes": 2,
-    "dislikes": 3,
-    "author": "testanswer1@mail.com",
-    "text": "DO IT!",
-    "tag1": "Python",
-    "tag2": "Patterns",
-    "tag3": "IO"
-})
-
-ANSWERS.append({
-    "title": "title " + str(i),
-    "id": 2,
-    "views": 2,
-    "votes": 42,
-    "likes": 100,
-    "dislikes": 0,
-    "author": "testanswer2@mail.com",
-    "text": "Yes, this is the best place, do your best and in a year you will see an excellent result, you need to prepare hard every day.",
-    "tag1": "Python",
-    "tag2": "Patterns",
-})
-
-NAME_TAGS = {
-    "1": "Python",
-    "2": "C++",
-    "3": "Qt",
-    "4": "C#",
-    "5": "JS",
-    "6": "Go",
-    "7": "C",
-    "8": "Rust",
-    "9": "1C",
-    "10": "Rudy",
-    "11": "Pascal",
-    "12": "TypeScript"
-}
-
-MEMBERS = {
-    "0": "Bogdan007",
-    "1": "Avenger303",
-    "2": "Bomonec373",
-    "3": "MC_Gogozik#",
-}
-
+users = Profile.objects.get_top_users(count=10)
 
 def index(request):
-    return render(request, "index.html", {"questions": QUESTIONS, "tags": NAME_TAGS, "members": MEMBERS})
+    questions = Question.objects.new()
+    content = paginator.paginate(questions, request, 10)
+    content.update({"category": "New questions",
+                    "forward_category": "Best questions",
+                    'best_members': users,
+                    "key": "authorized",
+                    "popular_tags": Tag.objects.top_tags()})
 
-
-def ask(request):
-    return render(request, "ask.html", {"questions": QUESTIONS, "tags": NAME_TAGS, "members": MEMBERS})
+    return render(request, "index.html", content)
 
 
 def hot(request):
-    return render(request, 'index.html', {"questions": QUESTIONS, "tags": NAME_TAGS, "members": MEMBERS})
+    questions = Question.objects.hot()
+    content = paginator.paginate(questions, request, 3)
+    content.update({
+        "category": "Best questions",
+        "forward_category": "New question",
+        "popular_tags": Tag.objects.top_tags(),
+        "redirect_new": "new",
+        'best_members': users})
+
+    return render(request, 'index.html', content)
 
 
-def question(request, i: int):
-    return render(request, "question_page.html", {"question": QUESTIONS[i], "tags": NAME_TAGS, "members": MEMBERS, "answers": ANSWERS})
+def question(request, question_id):
+    try:
+        question = Question.objects.get_by_id(question_id)
+        answers = Answer.objects.answer_by_question(question_id)
+    except Exception:
+        return render(request, 'not_found.html', {"hot_page": "Best questions",
+                                                  "new_page": "New questions",
+                                                  "popular_tags": Tag.objects.top_tags(),
+                                                  'best_members': users
+                                                  })
 
+    content = paginator.paginate(answers, request, 3)
+    content.update({'question': question,
+                    'popular_tags': Tag.objects.top_tags(),
+                    'answers': paginator.paginate(answers, request, 3),
+                    'best_members': users
+                    })
 
-def login(request):
-    return render(request, "login.html", {"questions": QUESTIONS, "tags": NAME_TAGS, "members": MEMBERS})
-
-
-def signup(request):
-    return render(request, "signup.html", {"questions": QUESTIONS, "tags": NAME_TAGS, "members": MEMBERS})
-
-
-def user_settings(request):
-    return render(request, "user_settings.html", {"questions": QUESTIONS, "tags": NAME_TAGS, "members": MEMBERS})
+    return render(request, "question_page.html", content)
 
 
 def tag(request, name: str):
-    return render(request, "tag.html", {"questions": QUESTIONS, "tags": NAME_TAGS, "members": MEMBERS, "tag": name})
+    try:
+        tags = Question.objects.by_tag(tag)
+    except Exception:
+        return render(request, 'not_found.html', {"hot_page": "Best questions",
+                                                  "new_page": "New questions",
+                                                  "popular_tags": Tag.objects.top_tags(),
+                                                  'best_members': users
+                                                  })
+    content = paginator.paginate(tags, request, 3)
+    content.update(
+        {'best_members': users,
+         'popular_tags': Tag.objects.top_tags(),
+         "one_tag": tag})
+
+    return render(request, "tag.html", content)
 
 
-def page(request, i: int):
-    return render(request, 'index.html', {"questions": QUESTIONS, "tags": NAME_TAGS, "members": MEMBERS})
+def ask(request):
+    return render(request, 'ask.html', {'popular_tags': Tag.objects.top_tags(), 'best_members': users, "key": "authorized"})
+
+
+def login(request):
+    return render(request, 'login.html', {'popular_tags': Tag.objects.top_tags(), 'best_members': users})
+
+
+def signup(request):
+    return render(request, 'signup.html', {'popular_tags': Tag.objects.top_tags(), 'best_members': users})
+
+
+def user_settings(request):
+    return render(request, 'settings.html', {"key": "authorized", 'popular_tags': Tag.objects.top_tags(), 'best_members': users})
+
+

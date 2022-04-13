@@ -1,61 +1,14 @@
 {%  load static %}
 
 <h1 class="mt-5 text-center">Popular Tags</h1>
+{% for tag in popular_tags %}
+{% if forloop.counter0|is_newline == True %}
 <div class="btn-group-vertical">
 
     <div class="btn-group">
         <div class="tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.1 %}" class="btn btn-success"> {{ tags.1 }}</a>
+            <a href="{% url "tag" tag=tag %}" class="btn btn-success"> {{ tag }}</a>
         </div>
-
-        <div class="tags-buttons tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.2 %}" class="btn btn-success"> {{ tags.2 }}</a>
-        </div>
-
-        <div class="tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.3 %}" class="btn btn-success"> {{ tags.3 }}</a>
-        </div>
-    </div>
-
-    <div class="btn-group">
-        <div class="tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.4 %}" class="btn btn-success"> {{ tags.4 }}</a>
-        </div>
-
-        <div class="tags-buttons tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.5 %}" class="btn btn-success"> {{ tags.5 }}</a>
-        </div>
-
-        <div class="tags-buttons btn-group-lg">
-           <a href="{% url "tag" tags.6 %}" class="btn btn-success"> {{ tags.6 }}</a>
-        </div>
-    </div>
-
-    <div class="btn-group">
-        <div class="tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.7 %}" class="btn btn-success"> {{ tags.7 }}</a>
-        </div>
-
-        <div class="tags-buttons tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.8 %}" class="btn btn-success"> {{ tags.8 }}</a>
-        </div>
-
-        <div class="tags-buttons btn-group-lg">
-           <a href="{% url "tag" tags.9 %}" class="btn btn-success"> {{ tags.9 }}</a>
-        </div>
-    </div>
-
-    <div class="btn-group">
-        <div class="tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.10 %}" class="btn btn-success"> {{ tags.10}}</a>
-        </div>
-
-        <div class="tags-buttons tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.11 %}" class="btn btn-success"> {{ tags.11 }}</a>
-        </div>
-
-        <div class="tags-buttons btn-group-lg">
-            <a href="{% url "tag" tags.12 %}" class="btn btn-success"> {{tags.12 }}</a>
-        </div>
+        {% endif %}
     </div>
 </div>
