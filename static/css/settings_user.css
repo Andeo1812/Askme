@@ -1,0 +1,14 @@
+.settings-nick-field {
+    width: 240px;
+    margin-bottom: 10px;
+}
+
+.settings-assert {
+    margin-left: 600px;
+}
+
+.settings {
+    border: 4px solid green;
+    border-radius: 3px;
+
+}

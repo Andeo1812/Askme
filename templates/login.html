@@ -6,6 +6,9 @@
 {% include "include/unauthorized.html" %}
 {% endblock type_work %}
 
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
+
 {% block content %}
 <div class="text-center">
     <form>
@@ -16,9 +19,14 @@
             <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
             <label for="floatingInput">Email address</label>
         </div>
+
         <div class="form-floating login">
             <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
+        </div>
+
+        <div class="red">
+          <p class="red">Wrong password/login. Please try again.</p>
         </div>
 
         <div class="checkbox mb-3">
