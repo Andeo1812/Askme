@@ -35,7 +35,20 @@
 }
 
 .avatar-question {
-    width: 120px;
+    width: 90px;
     height: 120px;
     margin-top: 15px;
+}
+
+.like {
+    margin-left: -15px;
+    width: 40px;
+    height: 40px;
+}
+
+.dislike {
+    width: 40px;
+    height: 40px;
+
+    transform: rotate(180deg);
 }

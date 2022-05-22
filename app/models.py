@@ -76,10 +76,18 @@ class Tag(models.Model):
         verbose_name_plural = 'Tags'
 
 
+class QuestionToAnswer(models.Model):
+    class Meta:
+        verbose_name = "question_answer"
+        verbose_name_plural = 'questions_answers'
+
+
 class Question(models.Model):
     views = models.IntegerField(default=0)
 
-    title = models.CharField(max_length=255)
+    likes = models.IntegerField(default=0)
+
+    dislikes = models.IntegerField(default=0)
 
     text = models.TextField()
 
@@ -90,6 +98,8 @@ class Question(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     tags = models.ManyToManyField(Tag, related_name='tag_related')
+
+    answers = models.ManyToManyField(QuestionToAnswer)
 
     objects = QuestionManager()
 
@@ -105,6 +115,10 @@ class Question(models.Model):
 class Answer(models.Model):
     views = models.IntegerField(default=0)
 
+    likes = models.IntegerField(default=0)
+
+    dislikes = models.IntegerField(default=0)
+
     text = models.TextField()
 
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -113,71 +127,16 @@ class Answer(models.Model):
 
     profile = models.ForeignKey(Profile, related_name='profile_related', on_delete=models.CASCADE)
 
-    question = models.ForeignKey(Question, related_name='answer_related', on_delete=models.CASCADE)
-
     tags = models.ManyToManyField(Tag, related_name='tag_related_a')
 
+    questions = models.ManyToManyField(QuestionToAnswer)
+
     objects = AnswerManager()
+
+    def __str__(self):
+        return self.profile
 
     class Meta:
         verbose_name = "Answer"
         verbose_name_plural = "Answers"
         ordering = ['-pub_date']
-
-
-class LikeQuestion(models.Model):
-    LIKE = '1'
-    DISLIKE = '-1'
-
-    MARK_L = [
-        (LIKE, 'Like'),
-        (DISLIKE, 'UnLike'),
-    ]
-    MARK_D = [
-        (LIKE, 'DisLike'),
-        (DISLIKE, 'UnDislike')
-    ]
-
-    mark_l = models.IntegerField(choices=MARK_L, blank=True, null=True)
-
-    mark_d = models.IntegerField(choices=MARK_D, blank=True, null=True)
-
-    question = models.ForeignKey(Question, related_name="question_like", on_delete=models.CASCADE)
-
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-
-    pub_date = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        db_table = 'app_like_question'
-        verbose_name = 'Like_question'
-        verbose_name_plural = 'Likes_questions'
-
-
-class LikeAnswer(models.Model):
-    LIKE = '1'
-    DISLIKE = '-1'
-
-    MARK_L = [
-        (LIKE, 'Like'),
-        (DISLIKE, 'UnLike'),
-    ]
-    MARK_D = [
-        (LIKE, 'DisLike'),
-        (DISLIKE, 'UnDislike')
-    ]
-
-    mark_l = models.IntegerField(choices=MARK_L, blank=True, null=True)
-
-    mark_d = models.IntegerField(choices=MARK_D, blank=True, null=True)
-
-    answer = models.ForeignKey(Answer, related_name="answer_like", on_delete=models.CASCADE)
-
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-
-    pub_date = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        db_table = 'app_like_answer'
-        verbose_name = 'Like_answer'
-        verbose_name_plural = 'Likes_answers'

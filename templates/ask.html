@@ -11,13 +11,13 @@
 <form>
     <div class="mb-3 question-textarea-title">
         <label for="InputTitle" class="form-label">Question title</label>
-        <input type="text" class="form-control" pattern="[A-z]{1,100}" id="InputTitle" aria-describedby="InputTitle">
+        <input type="text"  maxlength="128" class="form-control" pattern="[A-z]{1,100}" id="InputTitle" aria-describedby="InputTitle">
         <div id="InputTitle" class="form-text">Input title of your question</div>
     </div>
 
     <div class="mb-3 question-textarea-text">
         <label for="InputDescriptionQuestion" class="form-label">Question</label>
-        <textarea class="form-control" id="InputDescriptionQuestion" rows="3"></textarea>
+        <textarea class="form-control"  maxlength="50" id="InputDescriptionQuestion" rows="3"></textarea>
         <div id="InputDescriptionQuestion" class="form-text">Enter a detailed description of your question</div>
     </div>
 
