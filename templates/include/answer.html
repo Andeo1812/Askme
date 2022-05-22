@@ -15,11 +15,7 @@
             </div>
 
             <span class="text-success">
-                {% if answer.likes == None %}
-                    0
-                {% else %}
-                    {{ answer.likes }}
-                {% endif %}
+                {{ answer.likes }}
             </span>
 
             <div class="btn likes-buttons">
@@ -27,18 +23,14 @@
             </div>
 
             <span class="text-danger">
-                {% if answer.dislikes == None %}
-                    0
-                {% else %}
-                    {{ answer.dislikes }}
-                {% endif %}
+               {{ answer.dislikes }}
             </span>
 
         </div>
 
         <div class="col-4 btn">
             <span>
-                  <p> <b>Author:</b>&nbsp <a href="#################">{{ answer.profile }}</a> </p>
+                  <p> <b>Author:</b>&nbsp <a href="#################">{{ answer.author }}</a> </p>
                 </span>
         </div>
 

@@ -20,14 +20,8 @@ class AnswerManager(models.Manager):
     def answer_by_question(self, id):
         return self.filter(question__id=id)
 
-    def count_answers(self):
-        return self.annotate(answers=Count('answer_related', distinct=True))
-
 
 class QuestionManager(models.Manager):
-    def count_answers(self):
-        return self.annotate(answers=Count('answer_related', distinct=True))
-
     def get_by_id(self, id):
         return self.get(id=id)
 
@@ -100,6 +94,9 @@ class Question(models.Model):
 
     def get_likes(self):
         return '%d' % (self.likes)
+
+    def answers(self):
+        return '%d' % (Answer.objects.filter(question_id=self.id)).count()
 
     class Meta:
         verbose_name = "Question"

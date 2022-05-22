@@ -40,28 +40,20 @@
             </div>
 
             <span class="text-success">
-                {% if question.likes == None %}
-                    0
-                {% else %}
-                    {{ question.likes }}
-                {% endif %}
+                 {{ question.likes }}
             </span>
 
             <div class="btn likes-buttons">
               <img class="dislike" src="{% static "img/like.png" %}">
             </div>
             <span class="text-danger">
-                {% if question.dislikes == None %}
-                    0
-                {% else %}
-                    {{ question.dislikes }}
-                {% endif %}
+                {{ question.dislikes }}
             </span>
 
         </div>
 
         <div class="col-4">
-            <p><b>Author:</b> &nbsp<a href="###########">{{ question.profile }}</a> </p>
+            <p><b>Author:</b> &nbsp<a href="###########">{{ question.author }}</a> </p>
         </div>
 
         <div class="col-5">
