@@ -86,8 +86,6 @@ class Question(models.Model):
 
     pub_date = models.DateTimeField(default=timezone.now)
 
-    rating = models.IntegerField(verbose_name="question_rating", default=0)
-
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     tags = models.ManyToManyField(Tag, related_name='tag_related')
@@ -128,7 +126,10 @@ class Answer(models.Model):
     objects = AnswerManager()
 
     def __str__(self):
-        return self.profile
+        return '%s' % (self.profile.user.username)
+
+    def get_likes(self):
+        return self.likes
 
     class Meta:
         verbose_name = "Answer"
