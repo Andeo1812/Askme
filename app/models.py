@@ -18,7 +18,10 @@ class AnswerManager(models.Manager):
         return self.order_by('-likes')
 
     def answer_by_question(self, id):
-        return self.filter(questions__id=id)
+        return self.filter(question__id=id)
+
+    def count_answers(self):
+        return self.annotate(answers=Count('answer_related', distinct=True))
 
 
 class QuestionManager(models.Manager):
@@ -86,7 +89,7 @@ class Question(models.Model):
 
     pub_date = models.DateTimeField(default=timezone.now)
 
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     tags = models.ManyToManyField(Tag, related_name='tag_related')
 
@@ -117,16 +120,16 @@ class Answer(models.Model):
 
     correct = models.BooleanField(default=False)
 
-    profile = models.ForeignKey(Profile, related_name='profile_related', on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, related_name='profile_related', on_delete=models.CASCADE)
 
     tags = models.ManyToManyField(Tag, related_name='tag_related_a')
 
-    questions = models.ManyToManyField(Question, related_name='questions_answers')
+    question = models.ForeignKey(Question, related_name='answer_related', on_delete=models.CASCADE)
 
     objects = AnswerManager()
 
     def __str__(self):
-        return '%s' % (self.profile.user.username)
+        return '%s' % (self.author.user.username)
 
     def get_likes(self):
         return self.likes
