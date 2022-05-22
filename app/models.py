@@ -11,37 +11,34 @@ class TagManager(models.Manager):
 
 
 class AnswerManager(models.Manager):
+    def count_likes(self):
+        return self.annotate(Count("likes"))
+
     def hot(self):
-        res = self.annotate(likes=Sum('answer_like__mark_l')).order_by('-likes').exclude(likes=None)
-        if res.count() < 3:
-            res = self.annotate(likes=Sum('answer_like__mark_l')).order_by('-likes')
-        return res
+        return self.order_by('-likes')
 
     def answer_by_question(self, id):
-        return self.annotate(likes=Sum('answer_like__mark_l')).order_by('-likes').filter(question_id=id)
+        return self.filter(questions__id=id)
 
 
 class QuestionManager(models.Manager):
     def count_answers(self):
         return self.annotate(answers=Count('answer_related', distinct=True))
 
-    def count_likes(self):
-        res = self.count_answers().annotate(likes=Sum('question_like__mark_l')).order_by('-likes').exclude(likes=None)
-        if res.count() < 3:
-            res = self.count_answers().annotate(likes=Sum('question_like__mark_l')).order_by('-likes')
-        return res
-
     def get_by_id(self, id):
-        return self.count_likes().get(id=id)
+        return self.get(id=id)
+
+    def count_likes(self, id):
+        return self.get(id=id).get_likes()
 
     def by_tag(self, tag):
-        return self.count_answers().filter(tags__name=tag)
+        return self.filter(tags__name=tag)
 
     def new(self):
-        return self.count_likes().order_by('-pub_date')
+        return self.order_by('-pub_date')
 
     def hot(self):
-        return self.count_likes()
+        return self.order_by('-likes')
 
 
 
@@ -77,6 +74,8 @@ class Tag(models.Model):
 
 
 class Question(models.Model):
+    title = models.CharField(max_length=256)
+
     views = models.IntegerField(default=0)
 
     likes = models.IntegerField(default=0)
@@ -97,6 +96,9 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_likes(self):
+        return '%d' % (self.likes)
 
     class Meta:
         verbose_name = "Question"
@@ -121,7 +123,7 @@ class Answer(models.Model):
 
     tags = models.ManyToManyField(Tag, related_name='tag_related_a')
 
-    questions = models.ManyToManyField(Question)
+    questions = models.ManyToManyField(Question, related_name='questions_answers')
 
     objects = AnswerManager()
 
