@@ -1,5 +1,4 @@
 .idea/
 tmp/
-db.sqlite3
 venv/
 Askme/__pycache__/
