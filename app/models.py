@@ -76,12 +76,6 @@ class Tag(models.Model):
         verbose_name_plural = 'Tags'
 
 
-class QuestionToAnswer(models.Model):
-    class Meta:
-        verbose_name = "question_answer"
-        verbose_name_plural = 'questions_answers'
-
-
 class Question(models.Model):
     views = models.IntegerField(default=0)
 
@@ -98,8 +92,6 @@ class Question(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     tags = models.ManyToManyField(Tag, related_name='tag_related')
-
-    answers = models.ManyToManyField(QuestionToAnswer)
 
     objects = QuestionManager()
 
@@ -129,7 +121,7 @@ class Answer(models.Model):
 
     tags = models.ManyToManyField(Tag, related_name='tag_related_a')
 
-    questions = models.ManyToManyField(QuestionToAnswer)
+    questions = models.ManyToManyField(Question)
 
     objects = AnswerManager()
 
