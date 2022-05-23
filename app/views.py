@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.core.cache import cache
 from app.models import *
 from app.forms import *
 import paginator
@@ -88,12 +87,26 @@ def login(request):
             user = auth.authenticate(request, **user_form.cleaned_data)
             if user:
                 return redirect(reverse("new"))
+            user_form.add_error('password', "Not such Login/Password")
 
     return render(request, 'login.html', {'form': user_form, 'popular_tags': top_tags, 'best_members': users})
 
 
 def signup(request):
-    return render(request, 'signup.html', {'popular_tags': top_tags, 'best_members': users})
+    if request.method == 'GET':
+        user_form = RegisterForm()
+    elif request.method == 'POST':
+        user_form = RegisterForm(data=request.POST)
+        if user_form.is_valid():
+            form_data = user_form.cleaned_data.pop("password_repeat")
+            form_avatar = user_form.cleaned_data.pop("avatar")
+            user = User.objects.create_user(**user_form.cleaned_data)
+            user.save()
+            Profile.objects.create(user=user, avatar=form_avatar)
+            return redirect("new")
+        user_form.add_error('password', "User exist")
+
+    return render(request, 'signup.html', {'form': user_form, 'popular_tags': top_tags, 'best_members': users})
 
 
 def user_settings(request):

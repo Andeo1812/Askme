@@ -1,5 +1,6 @@
 {% extends "include/base.html" %}
 {% load static %}
+{% load bootstrap4 %}
 
 
 {% block type_work %}
@@ -8,55 +9,15 @@
 
 {% block content %}
 <div class="form-signin text-center">
-    <form>
-        <img class="mb-4 login_margin" src="../static/img/logo.png" alt="" width="72" height="57">
+    <form action="/signup/" method="post" novalidate>
+        {% csrf_token %}
+        <img class="mb-4 login_margin" src="{% static "img/logo.png" %}" alt="" width="72" height="57">
         <h1 class="h3 mb-3 fw-normal">Sign up</h1>
 
-        <div class="form-floating login">
-            <input type="email" maxlength="64" class="form-control" id="floatingInputLogin"
-                   placeholder="name@example.com">
-            <label for="floatingInputLogin">Nickname</label>
-        </div>
-
-        <div class="form-floating login">
-            <input type="email" maxlength="64" class="form-control" id="floatingInputNickname"
-                   placeholder="name@example.com">
-            <label for="floatingInputNickname">Login</label>
-        </div>
-
-        <div class="form-floating login">
-            <input type="email" maxlength="64" class="form-control" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput">Email address</label>
-        </div>
-
-        <div class="form-floating login">
-            <input type="password" maxlength="64" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Password</label>
-        </div>
-
-        <div class="form-floating login">
-            <input type="password" maxlength="64" class="form-control" id="confirmPassword" placeholder="Password">
-            <label for="confirmPassword">Confirm Password</label>
-        </div>
-
-        <div class="red">
-          <p class="red">Passwords do not match!</p>
-        </div>
-
-        <form>
-            <label for="floatingInputAvatar" class="load_avatar"><h5>load avatar</h5></label>
-            <input required type="file" class="log-in-fields" id="floatingInputAvatar">
-            <br> <br> <br>
-        </form>
-
-        <div class="checkbox mb-2">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
-        </div>
-        <button class="btn btn-lg btn-primary " type="submit">Sign in</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+        {% bootstrap_form form %}
+        <button class="btn btn-lg btn-primary" type="submit">Sign up</button>
     </form>
-    </form>
+
+    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
 </div>
 {% endblock content %}

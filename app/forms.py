@@ -3,33 +3,50 @@ from django.core.validators import ValidationError
 
 from app.models import Profile
 
+
 class LoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Login")
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Password')
+    username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Login", max_length=64)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Password', max_length=64)
 
     def clean_password(self):
         data = self.cleaned_data['password']
-        if len(data) < 8:
-            raise ValidationError("Password should be more then 7 symbols.")
+        if len(data) < 13:
+            raise ValidationError("Password should be more then 12 symbols.")
+        return data
+
+    def clean_username(self):
+        data = self.cleaned_data['username']
+        if len(data) < 9:
+            raise ValidationError("Username should be more then 8 symbols.")
         return data
 
 
-# class RegisterForm(forms.Form):
-#     username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Логин")
-#     email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-group mb-3"}), label="Email")
-#     password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Пароль')
-#     password_repeat = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}),
-#                                       label='Повторите пароль')
-#     first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Имя")
-#     avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Аватар", required=False)
-#
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         passwd_one = cleaned_data['password']
-#         passwd_two = cleaned_data['password_repeat']
-#         if passwd_one != passwd_two:
-#             self.add_error(None, "Пароли не совпадают")
-#
+class RegisterForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="login", max_length=48)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-group mb-3"}), label="Email", max_length=64)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Password', max_length=64)
+    password_repeat = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Repeat password', max_length=64)
+    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Name", required=False, max_length=64)
+    last_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Surname", required=False, max_length=64)
+    avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Avatar", required=False, max_length=64)
+
+    def clean_password(self):
+        data = self.data['password']
+        if len(data) < 13:
+            raise ValidationError("Password should be more then 12 symbols.")
+        return data
+
+    def clean_username(self):
+        data = self.data['username']
+        if len(data) < 9:
+            raise ValidationError("Username should be more then 8 symbols.")
+        return data
+
+    def clean_password_repeat(self):
+        passwd_one = self.data['password']
+        passwd_two = self.data['password_repeat']
+        if passwd_one != passwd_two:
+            raise ValidationError("Passwords do not match")
 #
 # class SettingsForm(forms.ModelForm):
 #     avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Аватар", required=False)

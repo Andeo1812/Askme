@@ -9,15 +9,16 @@
 
 {% block content %}
 <div class="text-center form-signin m-auto" style="width: 30em;">
-    <form action="/login/" method="post">
+    <form action="/login/" method="post" novalidate>
         {% csrf_token %}
         <img class="mb-4 login_margin" src="{% static "img/logo.png" %}" alt="" width="72" height="57">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
         {% bootstrap_form form %}
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Log in</button>
+        <button class="btn btn-lg btn-primary" type="submit">Log in</button>
 
         <div class="mt-5">
+            <h5>First time?</h5>
             <a href="{% url "signup" %}" class="btn btn-lg btn-primary">Sign up</a>
         </div>
 
@@ -25,33 +26,3 @@
     </form>
 </div>
 {% endblock content %}
-
-
-<!--    <form action="/login" method="post">-->
-<!--        <img class="mb-4 login_margin" src="{% static "img/logo.png" %}" alt="" width="72" height="57">-->
-<!--        <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>-->
-
-<!--        <div class="form-floating login">-->
-<!--            <input type="email" maxlength="64" class="form-control" id="floatingInput" placeholder="name@example.com">-->
-<!--            <label for="floatingInput">Email address</label>-->
-<!--        </div>-->
-
-<!--        <div class="form-floating login">-->
-<!--            <input type="password" maxlength="64"  class="form-control" id="floatingPassword" placeholder="Password">-->
-<!--            <label for="floatingPassword">Password</label>-->
-<!--        </div>-->
-
-<!--        <div class="red">-->
-<!--          <p class="red">Wrong Password/login!</p>-->
-<!--        </div>-->
-
-<!--        <div class="checkbox mb-3">-->
-<!--            <label>-->
-<!--                <input type="checkbox" class=value="remember-me"> Remember me-->
-<!--            </label>-->
-<!--        </div>-->
-<!--        <a href="{% url "new" %}" class="btn btn-lg btn-primary">Log in</a>-->
-
-
-<!--        <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>-->
-<!--    </form>-->
