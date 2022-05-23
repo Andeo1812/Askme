@@ -163,7 +163,7 @@ def signup(request):
             Profile.objects.create(user=user, avatar=form_avatar)
             auth.login(request, user)
             return redirect("new")
-        user_form.add_error('password', "User exist")
+        user_form.add_error('password', "Wrong login/password")
     return render(request, 'signup.html', {'form': user_form, 'popular_tags': top_tags, 'best_members': users})
 
 

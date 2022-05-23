@@ -3,7 +3,7 @@
 {% load bootstrap4 %}
 
 {% block content %}
-<div class="form-signin text-center">
+<div class="form-signin text-center m-auto" style="width: 30em;">
     <form action="/signup/" method="post" novalidate>
         {% csrf_token %}
         <img class="mb-4 login_margin" src="{% static "img/logo.png" %}" alt="" width="72" height="57">
