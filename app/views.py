@@ -1,8 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from app.models import *
+from app.forms import *
 import paginator
+from Askme.settings import REDIRECT_FIELD_NAME
 
-users = Profile.objects.get_top_users(count=10)
+users = Profile.objects.get_top_users(count=6)
+
+top_tags = Tag.objects.top_tags(count=6)
 
 def index(request):
     questions = Question.objects.new()
@@ -11,7 +18,7 @@ def index(request):
                     "forward_category": "Best questions",
                     'best_members': users,
                     "key": "authorized",
-                    "popular_tags": Tag.objects.top_tags()})
+                    "popular_tags": top_tags})
 
     return render(request, "index.html", content)
 
@@ -22,7 +29,7 @@ def hot(request):
     content.update({
         "category": "Best questions",
         "forward_category": "New question",
-        "popular_tags": Tag.objects.top_tags(),
+        "popular_tags": top_tags,
         "redirect_new": "new",
         'best_members': users})
 
@@ -36,13 +43,13 @@ def question(request, question_id):
     except Exception:
         return render(request, 'not_found.html', {"hot_page": "Best questions",
                                                   "new_page": "New questions",
-                                                  "popular_tags": Tag.objects.top_tags(),
+                                                  "popular_tags": top_tags,
                                                   'best_members': users
                                                   })
 
     content = paginator.paginate(answers, request, 3)
     content.update({'question': question,
-                    'popular_tags': Tag.objects.top_tags(),
+                    'popular_tags': top_tags,
                     'answers': paginator.paginate(answers, request, 3),
                     'best_members': users
                     })
@@ -56,31 +63,40 @@ def tag(request, tag):
     except Exception:
         return render(request, 'not_found.html', {"hot_page": "Best questions",
                                                   "new_page": "New questions",
-                                                  "popular_tags": Tag.objects.top_tags(),
+                                                  "popular_tags": top_tags,
                                                   'best_members': users
                                                   })
     content = paginator.paginate(tags, request, 3)
     content.update(
         {'best_members': users,
-         'popular_tags': Tag.objects.top_tags(),
+         'popular_tags': top_tags,
          "one_tag": tag})
 
     return render(request, "tag.html", content)
 
 
 def ask(request):
-    return render(request, 'ask.html', {'popular_tags': Tag.objects.top_tags(), 'best_members': users, "key": "authorized"})
+    return render(request, 'ask.html', {'popular_tags': top_tags, 'best_members': users, "key": "authorized"})
 
 
 def login(request):
-    return render(request, 'login.html', {'popular_tags': Tag.objects.top_tags(), 'best_members': users})
+    if request.method == 'GET':
+        user_form = LoginForm()
+    elif request.method == 'POST':
+        user_form = LoginForm(data=request.POST)
+        if user_form.is_valid():
+            user = auth.authenticate(request, **user_form.cleaned_data)
+            if user:
+                return redirect(reverse("new"))
+
+    return render(request, 'login.html', {'form': user_form, 'popular_tags': top_tags, 'best_members': users})
 
 
 def signup(request):
-    return render(request, 'signup.html', {'popular_tags': Tag.objects.top_tags(), 'best_members': users})
+    return render(request, 'signup.html', {'popular_tags': top_tags, 'best_members': users})
 
 
 def user_settings(request):
-    return render(request, 'user_settings.html', {"key": "authorized", 'popular_tags': Tag.objects.top_tags(), 'best_members': users})
+    return render(request, 'user_settings.html', {"key": "authorized", 'popular_tags': top_tags, 'best_members': users})
 
 
