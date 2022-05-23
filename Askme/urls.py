@@ -20,4 +20,6 @@ urlpatterns = [
     path('user_settings/', views.user_settings, name="user_settings"),
 
     path('tag/<str:tag>/', views.tag, name="tag"),
+
+    path('logout', views.logout_view, name="logout")
 ]

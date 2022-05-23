@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import ValidationError
 
-from app.models import Profile
+from app.models import *
 
 
 class LoginForm(forms.Form):
@@ -10,8 +10,8 @@ class LoginForm(forms.Form):
 
     def clean_password(self):
         data = self.cleaned_data['password']
-        if len(data) < 13:
-            raise ValidationError("Password should be more then 12 symbols.")
+        if len(data) < 9:
+            raise ValidationError("Password should be more then 8 symbols.")
         return data
 
     def clean_username(self):
@@ -26,14 +26,14 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-group mb-3"}), label="Email", max_length=64)
     password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Password', max_length=64)
     password_repeat = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Repeat password', max_length=64)
-    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Name", required=False, max_length=64)
+    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Name", max_length=64)
     last_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Surname", required=False, max_length=64)
     avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Avatar", required=False, max_length=64)
 
     def clean_password(self):
         data = self.data['password']
-        if len(data) < 13:
-            raise ValidationError("Password should be more then 12 symbols.")
+        if len(data) < 9:
+            raise ValidationError("Password should be more then 8 symbols.")
         return data
 
     def clean_username(self):
@@ -70,27 +70,26 @@ class RegisterForm(forms.Form):
 #         user.profile_related.avatar = self.cleaned_data['avatar']
 #         user.profile_related.save()
 #         return user
-#
-#
-#
-# class QuestionForm(forms.ModelForm):
-#     tag_list = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3",
-#                                                              "placeholder": "Укажите один или несколько тегов"}),
-#                                label="Теги")
-#
-#     class Meta:
-#         model = Question
-#         fields = ("title", "text",)
-#         labels = {
-#             "title": "Заголовок",
-#             "text": "Формулировка вопроса",
-#         }
-#         widgets = {
-#             "title": forms.TextInput(attrs={"class": "form-group mb-3", "placeholder": "Формулировка вопроса"}),
-#             "text": forms.Textarea(attrs={"class": "form-group mb-3", "placeholder": "Что такое корутины?"})
-#         }
-#
-#
+
+
+class AskForm(forms.ModelForm):
+    tag_list = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3",
+                                                             "placeholder": "Specify one or more tags"}),
+                               label="Tags")
+
+    class Meta:
+        model = Question
+        fields = ("title", "text",)
+        labels = {
+            "title": "Header",
+            "text": "Question wording",
+        }
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-group mb-3", "placeholder": "Question wording"}),
+            "text": forms.Textarea(attrs={"class": "form-group mb-3", "placeholder": "Peculiarities of C++ multithreading?"})
+        }
+
+
 # class AnswerForm(forms.ModelForm):
 #     class Meta:
 #         model = Answer

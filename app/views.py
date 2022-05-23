@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import auth
+from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from app.models import *
 from app.forms import *
@@ -73,9 +74,24 @@ def tag(request, tag):
 
     return render(request, "tag.html", content)
 
-
+@login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
 def ask(request):
-    return render(request, 'ask.html', {'popular_tags': top_tags, 'best_members': users, "key": "authorized"})
+    if request.method == "GET":
+        form = AskForm()
+    elif request.method == 'POST':
+        form = AskForm(data=request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.author = Profile.objects.get(user=request.user)
+            question.save()
+            for tag in form.cleaned_data['tag_list'].split():
+                new = Tag.objects.get_or_create(name=tag)[0]
+                question.tags.add(new)
+            question.save()
+            return redirect("one_question", question_id=question.id)
+        form.save()
+
+    return render(request, 'ask.html', {'form': form, 'popular_tags': top_tags, 'best_members': users, "key": "authorized"})
 
 
 def login(request):
@@ -90,6 +106,16 @@ def login(request):
             user_form.add_error('password', "Not such Login/Password")
 
     return render(request, 'login.html', {'form': user_form, 'popular_tags': top_tags, 'best_members': users})
+
+
+@login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
+def logout_view(request):
+    auth.logout(request)
+    prev = cache.get(REDIRECT_FIELD_NAME)
+    if not prev:
+        prev = "new"
+    cache.delete(REDIRECT_FIELD_NAME)
+    return redirect(prev)
 
 
 def signup(request):

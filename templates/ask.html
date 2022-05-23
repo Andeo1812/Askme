@@ -1,5 +1,6 @@
 {% extends "include/base.html" %}
 {% load static %}
+{% load bootstrap4 %}
 
 
 {% block type_work %}
@@ -8,27 +9,9 @@
 
 {% block content %}
 <h2 class="mt-5">Questions</h2>
-<form>
-    <div class="mb-3 question-textarea-title">
-        <label for="InputTitle" class="form-label">Question title</label>
-        <input type="text"  maxlength="128" class="form-control" pattern="[A-z]{1,100}" id="InputTitle" aria-describedby="InputTitle">
-        <div id="InputTitle" class="form-text">Input title of your question</div>
-    </div>
-
-    <div class="mb-3 question-textarea-text">
-        <label for="InputDescriptionQuestion" class="form-label">Question</label>
-        <textarea class="form-control"  maxlength="50" id="InputDescriptionQuestion" rows="3"></textarea>
-        <div id="InputDescriptionQuestion" class="form-text">Enter a detailed description of your question</div>
-    </div>
-
-    <label for="TagsQuestion" class="form-label">Tags</label>
-
-    <input type="text" pattern="[A-z]{1,30}" class="form-control question-textarea-tags" id="TagsQuestion" aria-describedby="TagsQuestion">
-
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Notify me of responses by mail</label>
-    </div>
+<form action="/ask/" method="post">
+    {% bootstrap_form form %}
+    {% csrf_token %}
 
     <button type="submit" class="btn btn-primary">Ask!</button>
 </form>
