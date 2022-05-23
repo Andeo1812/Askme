@@ -168,4 +168,14 @@ def signup(request):
 
 
 def user_settings(request):
-    return render(request, 'user_settings.html', {"key": "authorized", 'popular_tags': top_tags, 'best_members': users})
+    if request.method == "GET":
+        _profile = Profile.objects.get(user=request.user)
+        data = {"username": _profile.user.username, "email": _profile.user.email,
+                "first_name": _profile.user.first_name, "last_name": _profile.user.last_name, "avatar": _profile.avatar}
+        form = SettingsForm(data)
+    else:
+        form = SettingsForm(data=request.POST, files=request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse("user_settings"))
+    return render(request, 'user_settings.html', {"form": form, 'popular_tags': top_tags, 'best_members': users})

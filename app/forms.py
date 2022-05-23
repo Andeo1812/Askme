@@ -101,3 +101,31 @@ class AnswerForm(forms.ModelForm):
         widgets = {
             "text": forms.Textarea(attrs={"class": "form-group mb-3", "placeholder": "Input your answer"})
         }
+
+
+class SettingsForm(forms.ModelForm):
+    avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Avatar", required=False)
+    username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="login", max_length=48)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-group mb-3"}), label="Email", max_length=64)
+    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Name", required=False, max_length=64)
+    last_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Surname", required=False, max_length=64)
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'avatar', ]
+        labels = {
+            "username": "Login",
+            "first_name": "Name",
+        }
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-group mb-3", "readonly": "readonly"}),
+            "first_name": forms.TextInput(attrs={"class": "form-group mb-3"})
+        }
+        help_texts = {
+            'username': None,
+        }
+
+    def save(self, *args, **kwargs):
+        user = super().save(*args, *kwargs)
+        user.profile_related.avatar = self.cleaned_data['avatar']
+        user.profile_related.save()
+        return user

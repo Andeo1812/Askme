@@ -1,6 +1,6 @@
 {%  load static %}
 
-<img class="avatar" src="{{ request.user.profile_related.avatar.url }}">
+<img class="avatar" src="{{ request.user.profile_related.avatar }}">
 <a href="{% url "user_settings" %}" class="btn btn-outline-secondary log-in-btn">{{ request.user.username }}</a>
 
 <a href="{% url "logout" %}" class="btn btn-outline-secondary log-in-btn">Log out</a>

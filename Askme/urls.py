@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('login/', views.login, name="login"),
 
-    path('user_settings/', views.user_settings, name="user_settings"),
+    path('profile/edit/', views.user_settings, name="user_settings"),
 
     path('tag/<str:tag>/', views.tag, name="tag"),
 

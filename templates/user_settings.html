@@ -1,91 +1,15 @@
 {% extends "include/base.html" %}
 {% load static %}
+{% load bootstrap4 %}
 
 
 {% block content %}
-<div class="form-signin">
-    <div class="row">
-        <div class="col-4">
-            <img class="mt-4 mb-4 img-thumbnail avatar-settings" src="{% static "img/3.jpg" %}">
-            <form>
-                <label for="floatingInputAvatar"><h5>Update avatar</h5></label>
-                <input required type="file" class=" log-in-fields" id="floatingInputAvatar">
-                <br> <br> <br>
-            </form>
+<form action="/profile/edit/" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Accept changes</button>
         </div>
-
-        <div class="col-4">
-            <div class="row mt-5 ">
-                <div class="col-md-9 offset-md-1">
-                    <h4>Email address:</h4>
-                </div>
-
-                <div class="col-md-2">
-                    <h5><b> rowcolonprog@mail.ru </b></h5>
-                </div>
-            </div>
-
-            <div class="row mt-4">
-                <div class="col-md-9 offset-md-1">
-                    <h4>Nickname:</h4>
-                </div>
-
-                <div class="col-md-2">
-                    <h5><b> MC_Gogozik </b></h5>
-                </div>
-            </div>
-
-            <div class="row mt-4">
-                <div class="col-md-9 offset-md-1">
-                    <h4>Registration date:</h4>
-                </div>
-
-                <div class="col-md-2">
-                    <h5><b> 01.01.2022 </b></h5>
-                </div>
-            </div>
-
-            <div class="row mt-4">
-                <div class="col-md-9 offset-md-1">
-                    <h4>Birth date:</h4>
-                </div>
-
-                <div class="col-md-2">
-                    <h5><b> 02.01.1999 </b></h5>
-                </div>
-            </div>
-
-            <div class="row mt-4">
-                <div class="col-md-9 offset-md-1">
-                    <h4>New nickname:</h4>
-                </div>
-
-                <div class="col-md-2">
-                    <form>
-                        <div class="form-floating settings-nick-field">
-                            <input type="text" maxlength="64" class=" settings-nick-field form-control"
-                                   id="floatingInputNick" placeholder="Terminator228">
-                            <label for="floatingInputNick">Nickname</label>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-        </div>
-
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-2">
-        <a href="{% url "new" %}" class="btn btn-lg btn-dark">Log out</a>
-    </div>
-
-    <div class="col-md-10">
-        <button class="settings-assert btn btn-lg btn-success"
-                type="submit">Accept changes
-        </button>
-    </div>
-</div>
+    </form>
 {% endblock content %}
