@@ -81,7 +81,7 @@ class Command(BaseCommand):
         users_set = []
         profiles_set = []
         for i in range(self.USERS_NEEDS):
-            user = User(**create_user(i))
+            user = User.objects.create_user(**create_user(i))
             user.save()
             users_set.append(user)
             profile = Profile(user=user)
