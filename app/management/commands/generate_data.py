@@ -14,18 +14,18 @@ class Command(BaseCommand):
     RANDOM_NAME_API = 'https://randommer.io/api/Name'
     PARAGRAPHS_AMOUNT = 1
 
-    SCALE = 10
-    USERS_NEEDS = 10 // SCALE
-    QUESTIONS_NEEDS = 10 // SCALE
-    ANSWERS_NEEDS = 10 // SCALE
-    TAGS_NEEDS = 2 * QUESTIONS_NEEDS // SCALE
-    LIKES_NEEDS = 20 // SCALE
+    SCALE = 1000
+    USERS_NEEDS = 10000 // SCALE
+    QUESTIONS_NEEDS = 100000 // SCALE
+    ANSWERS_NEEDS = 1000000 // SCALE
+    TAGS_NEEDS = 20000 * QUESTIONS_NEEDS // SCALE
+    LIKES_NEEDS = 200000 // SCALE
 
     TITLE_LEN = 10
     MIN_TEXT_LEN = 20
     MAX_TEXT_LEN = 100
-    MAX_ANSWERS = 5
-    MAX_TAGS = 5
+    MAX_ANSWERS = 10
+    MAX_TAGS = 3
     MAX_LIKES = 40
     MAX_DISLIKES = 10
     MAX_VIEWS = 100
@@ -128,9 +128,8 @@ class Command(BaseCommand):
         while answers_created_indicate > 0:
             one_question_answers_count = random.randint(0, self.MAX_ANSWERS)
             answers_created_indicate -= one_question_answers_count
-            question = random.choice(questions)
             for i in range(one_question_answers_count):
-                answer = Answer(**create_answer(random.choice(users), question))
+                answer = Answer(**create_answer(random.choice(users), random.choice(questions)))
                 answers_set.append(answer)
 
         Answer.objects.bulk_create(answers_set)
@@ -148,11 +147,20 @@ class Command(BaseCommand):
                 tag = Tag(name=random.choice(self.text_dataset))
                 tag.save()
 
+    def questions_set_tags(self, questions, tags):
+        for question in questions:
+            for i in range(self.MAX_TAGS):
+                question.tags.add(random.choice(tags))
+
     def handle(self, *args, **options):
         self.create_users_and_ref_profiles()
         users = Profile.objects.all()
+        tags = Tag.objects.all()
         self.create_tags()
         self.create_questions(users)
         questions = Question.objects.all()
+        self.questions_set_tags(questions, tags)
         self.create_answers(users, questions)
+        answers = Answer.objects.all()
+        self.questions_set_tags(answers, tags)
         self.stdout.write(self.style.SUCCESS('SUCCESS'))

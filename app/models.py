@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class TagManager(models.Manager):
-    def top_tags(self, count=9):
+    def top_tags(self, count=5):
         return self.annotate(count=Count('tag_related')).order_by('-count')[:count]
 
 
