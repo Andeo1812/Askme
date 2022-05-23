@@ -11,7 +11,7 @@ urlpatterns = [
 
     path('hot/', views.hot, name="hot"),
 
-    path('question/<int:question_id>/', views.question, name="question"),
+    path('question/<int:question_id>', views.question, name="question"),
 
     path('signup/', views.signup, name="signup"),
 

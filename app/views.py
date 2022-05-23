@@ -11,6 +11,7 @@ users = Profile.objects.get_top_users(count=6)
 
 top_tags = Tag.objects.top_tags(count=6)
 
+
 def index(request):
     questions = Question.objects.new()
     content = paginator.paginate(questions, request, 10)
@@ -19,7 +20,6 @@ def index(request):
                     'best_members': users,
                     "key": "authorized",
                     "popular_tags": top_tags})
-
     return render(request, "index.html", content)
 
 
@@ -32,40 +32,56 @@ def hot(request):
         "popular_tags": top_tags,
         "redirect_new": "new",
         'best_members': users})
-
     return render(request, 'index.html', content)
 
 
 def question(request, question_id):
-    try:
-        question = Question.objects.get_by_id(question_id)
-        answers = Answer.objects.answer_by_question(question_id)
-    except Exception:
-        return render(request, 'not_found.html', {"hot_page": "Best questions",
-                                                  "new_page": "New questions",
-                                                  "popular_tags": top_tags,
-                                                  'best_members': users
-                                                  })
-
-    content = paginator.paginate(answers, request, 3)
-    content.update({'question': question,
-                    'popular_tags': top_tags,
-                    'answers': paginator.paginate(answers, request, 3),
-                    'best_members': users
-                    })
-
+    cache.set(REDIRECT_FIELD_NAME, request.path)
+    if request.method == 'POST':
+        form = AnswerForm(data=request.POST)
+        if form.is_valid():
+            ans = form.save(commit=False)
+            ans.author = Profile.objects.get(user=request.user)
+            ans.question = Question.objects.get(id=question_id)
+            ans.save()
+            for tag in form.cleaned_data['tag_list'].split():
+                new = Tag.objects.get_or_create(name=tag)[0]
+                ans.tags.add(new)
+            ans.save()
+            return redirect("question", question_id=question_id)
+    else:
+        try:
+            question = Question.objects.get_by_id(question_id)
+            answers = Answer.objects.answer_by_question(question_id)
+        except Exception:
+            return render(request, 'not_found.html', {"hot_page": "Best questions",
+                                                      "new_page": "New questions",
+                                                      "popular_tags": top_tags,
+                                                      'best_members': users
+                                                      })
+        else:
+            form = AnswerForm()
+            content = paginator.paginate(answers, request, 5)
+            content.update({'question': question,
+                            "one_question:": "yes",
+                            'popular_tags': top_tags,
+                            'answers': paginator.paginate(answers, request, 5),
+                            'best_members': users,
+                            "form": form
+                            })
     return render(request, "question_page.html", content)
 
 
 def tag(request, tag):
+    content = {"hot_page": "Best questions",
+               "new_page": "New questions",
+               "popular_tags": top_tags,
+               'best_members': users
+               }
     try:
         tags = Question.objects.by_tag(tag)
     except Exception:
-        return render(request, 'not_found.html', {"hot_page": "Best questions",
-                                                  "new_page": "New questions",
-                                                  "popular_tags": top_tags,
-                                                  'best_members': users
-                                                  })
+        return render(request, 'not_found.html', content)
     content = paginator.paginate(tags, request, 3)
     content.update(
         {'best_members': users,
@@ -73,6 +89,7 @@ def tag(request, tag):
          "one_tag": tag})
 
     return render(request, "tag.html", content)
+
 
 @login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
 def ask(request):
@@ -88,23 +105,38 @@ def ask(request):
                 new = Tag.objects.get_or_create(name=tag)[0]
                 question.tags.add(new)
             question.save()
-            return redirect("one_question", question_id=question.id)
+            return redirect("question", question_id=question.id)
         form.save()
 
-    return render(request, 'ask.html', {'form': form, 'popular_tags': top_tags, 'best_members': users, "key": "authorized"})
+    return render(request, 'ask.html',
+                  {'form': form, 'popular_tags': top_tags, 'best_members': users, "key": "authorized"})
 
 
 def login(request):
+    prev = cache.get(REDIRECT_FIELD_NAME)
+    nxt = request.GET.get(REDIRECT_FIELD_NAME, prev)
+    if not nxt:
+        nxt = 'new'
+    if request.user.is_authenticated:
+        return redirect(nxt)
+
     if request.method == 'GET':
         user_form = LoginForm()
+        cache.set(REDIRECT_FIELD_NAME, nxt)
     elif request.method == 'POST':
         user_form = LoginForm(data=request.POST)
         if user_form.is_valid():
             user = auth.authenticate(request, **user_form.cleaned_data)
-            if user:
-                return redirect(reverse("new"))
+            if user is not None:
+                auth.login(request, user)
+                next_url = cache.get(REDIRECT_FIELD_NAME)
+                cache.delete(REDIRECT_FIELD_NAME)
+                return redirect(next_url)
             user_form.add_error('password', "Not such Login/Password")
-
+    from pprint import pformat
+    print("\n\n", "-" * 100)
+    print(f"HERE: {pformat(user_form)}")
+    print("-" * 100, "\n\n")
     return render(request, 'login.html', {'form': user_form, 'popular_tags': top_tags, 'best_members': users})
 
 
@@ -129,13 +161,11 @@ def signup(request):
             user = User.objects.create_user(**user_form.cleaned_data)
             user.save()
             Profile.objects.create(user=user, avatar=form_avatar)
+            auth.login(request, user)
             return redirect("new")
         user_form.add_error('password', "User exist")
-
     return render(request, 'signup.html', {'form': user_form, 'popular_tags': top_tags, 'best_members': users})
 
 
 def user_settings(request):
     return render(request, 'user_settings.html', {"key": "authorized", 'popular_tags': top_tags, 'best_members': users})
-
-

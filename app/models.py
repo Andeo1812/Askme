@@ -18,7 +18,7 @@ class AnswerManager(models.Manager):
         return self.order_by('-likes')
 
     def answer_by_question(self, id):
-        return self.filter(question__id=id)
+        return self.order_by('-pub_date').filter(question__id=id)
 
 
 class QuestionManager(models.Manager):
@@ -59,7 +59,7 @@ class Profile(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
     objects = TagManager()
 
     def __str__(self):

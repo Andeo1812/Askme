@@ -1,9 +1,6 @@
 {% extends "include/base.html" %}
 {% load static %}
-
-{% block type_work %}
-{% include "include/authorized.html" %}
-{% endblock type_work %}
+{% load bootstrap4 %}
 
 
 {% block content %}
@@ -13,19 +10,13 @@
 
 <hr class="answer-hr">
 
-    {% for answer in page_object.object_list %}
-        {% include "include/answer.html" %}
-    {% endfor %}
+{% for answer in page_object.object_list %}
+{% include "include/answer.html" %}
+{% endfor %}
 
-<form>
-    <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Your answer</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-    </div>
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Notify me of responses by mail</label>
-    </div>
+<form action="/question/{{ question.id }}" method="post" novalidate>
+    {% csrf_token %}
+    {% bootstrap_form form %}
     <button type="submit" class="btn btn-primary mb-5">Post your answer</button>
 </form>
 

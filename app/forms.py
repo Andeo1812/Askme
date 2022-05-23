@@ -26,7 +26,7 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-group mb-3"}), label="Email", max_length=64)
     password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Password', max_length=64)
     password_repeat = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Repeat password', max_length=64)
-    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Name", max_length=64)
+    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Name", required=False, max_length=64)
     last_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Surname", required=False, max_length=64)
     avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Avatar", required=False, max_length=64)
 
@@ -90,10 +90,14 @@ class AskForm(forms.ModelForm):
         }
 
 
-# class AnswerForm(forms.ModelForm):
-#     class Meta:
-#         model = Answer
-#         fields = ('text',)
-#         widgets = {
-#             "text": forms.Textarea(attrs={"class": "form-group mb-3", "placeholder": "Введите ваш ответ"})
-#         }
+class AnswerForm(forms.ModelForm):
+    tag_list = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3",
+                                                             "placeholder": "Specify one or more tags"}),
+                               label="Tags")
+
+    class Meta:
+        model = Answer
+        fields = ("text",)
+        widgets = {
+            "text": forms.Textarea(attrs={"class": "form-group mb-3", "placeholder": "Input your answer"})
+        }
