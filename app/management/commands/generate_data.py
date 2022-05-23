@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from app.models import Profile, Question, Answer, Like, Tag
+from app.models import Profile, Question, Answer, Tag
 from django.contrib.auth.models import User
 from django.utils.timezone import timezone
 
@@ -93,7 +93,9 @@ class Command(BaseCommand):
                 'title': self.create_text_by_word_length(self.TITLE_LEN),
                 'text': self.create_text_by_word_length(random.randint(self.MIN_TEXT_LEN, self.MAX_TEXT_LEN)),
                 'pub_date': datetime.datetime.now(tz=timezone.utc),
-                'profile': user
+                'profile': user,
+                'likes': random.randint(0, self.MAX_LIKES),
+                'dislikes': random.randint(0, self.MAX_LIKES)
             }
             return question_fields
 
@@ -111,7 +113,9 @@ class Command(BaseCommand):
                 'correct': random.choice([True, False]),
                 'pub_date': datetime.datetime.now(tz=timezone.utc),
                 'question': question,
-                'author': user
+                'author': user,
+                'likes': random.randint(0, self.MAX_LIKES),
+                'dislikes': random.randint(0, self.MAX_LIKES)
             }
             return answer_fields
 
@@ -144,26 +148,6 @@ class Command(BaseCommand):
                 tag.save()
                 tag.question.add(random.choice(questions))
 
-    def create_likes(self, users, questions):
-        def create_like(user, question):
-            like_fields = {
-                'user': user,
-                'question': question
-            }
-            return like_fields
-
-        likes_created_indicate = self.LIKES_NEEDS
-        likes_set = []
-        while likes_created_indicate > 0:
-            one_question_like_amount = random.randint(0, self.MAX_LIKES)
-            likes_created_indicate -= one_question_like_amount
-            question = random.choice(questions)
-            for i in range(one_question_like_amount):
-                like = Like(**create_like(random.choice(users), question))
-                likes_set.append(like)
-
-        Like.objects.bulk_create(likes_set)
-
     def handle(self, *args, **options):
         self.create_users_and_ref_profiles()
         users = User.objects.all()
@@ -171,5 +155,4 @@ class Command(BaseCommand):
         questions = Question.objects.all()
         self.create_answers(users, questions)
         self.create_tags(questions)
-        self.create_likes(users, questions)
         self.stdout.write(self.style.SUCCESS('SUCCESS'))
