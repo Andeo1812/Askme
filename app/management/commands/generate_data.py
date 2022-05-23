@@ -19,7 +19,7 @@ class Command(BaseCommand):
     QUESTIONS_NEEDS = 10 // SCALE
     ANSWERS_NEEDS = 10 // SCALE
     TAGS_NEEDS = 2 * QUESTIONS_NEEDS // SCALE
-    LIKES_NEEDS = 200 // SCALE
+    LIKES_NEEDS = 20 // SCALE
 
     TITLE_LEN = 10
     MIN_TEXT_LEN = 20
@@ -27,6 +27,8 @@ class Command(BaseCommand):
     MAX_ANSWERS = 5
     MAX_TAGS = 5
     MAX_LIKES = 40
+    MAX_DISLIKES = 10
+    MAX_VIEWS = 100
 
     def __init__(self):
         super().__init__()
@@ -88,14 +90,15 @@ class Command(BaseCommand):
         Profile.objects.bulk_create(profiles_set)
 
     def create_questions(self, users):
-        def create_question(user):
+        def create_question(profile):
             question_fields = {
                 'title': self.create_text_by_word_length(self.TITLE_LEN),
                 'text': self.create_text_by_word_length(random.randint(self.MIN_TEXT_LEN, self.MAX_TEXT_LEN)),
                 'pub_date': datetime.datetime.now(tz=timezone.utc),
-                'profile': user,
+                'author': profile,
                 'likes': random.randint(0, self.MAX_LIKES),
-                'dislikes': random.randint(0, self.MAX_LIKES)
+                'dislikes': random.randint(0, self.MAX_DISLIKES),
+                'views': random.randint(0, self.MAX_VIEWS)
             }
             return question_fields
 
@@ -107,15 +110,16 @@ class Command(BaseCommand):
         Question.objects.bulk_create(questions_set)
 
     def create_answers(self, users, questions):
-        def create_answer(user, question):
+        def create_answer(profile, question):
             answer_fields = {
                 'text': self.create_text_by_word_length(random.randint(self.MIN_TEXT_LEN, self.MAX_TEXT_LEN)),
                 'correct': random.choice([True, False]),
                 'pub_date': datetime.datetime.now(tz=timezone.utc),
                 'question': question,
-                'author': user,
+                'author': profile,
                 'likes': random.randint(0, self.MAX_LIKES),
-                'dislikes': random.randint(0, self.MAX_LIKES)
+                'dislikes': random.randint(0, self.MAX_DISLIKES),
+                'views': random.randint(0, self.MAX_VIEWS)
             }
             return answer_fields
 
@@ -131,28 +135,24 @@ class Command(BaseCommand):
 
         Answer.objects.bulk_create(answers_set)
 
-    def create_tags(self, questions):
-        questions = questions
-        tag = Tag(tag_name=random.choice(self.text_dataset))
+    def create_tags(self):
+        tag = Tag(name=random.choice(self.text_dataset))
         tag.save()
-        tag.question.add(random.choice(questions))
         for i in range(self.TAGS_NEEDS):
             type_insertion = random.choice([0, 1])
             if type_insertion == 1:
                 tags = Tag.objects.all()
                 choiced = random.choice(tags)
-                choiced.question.add(random.choice(questions))
                 choiced.save()
             if type_insertion == 0:
-                tag = Tag(tag_name=random.choice(self.text_dataset))
+                tag = Tag(name=random.choice(self.text_dataset))
                 tag.save()
-                tag.question.add(random.choice(questions))
 
     def handle(self, *args, **options):
         self.create_users_and_ref_profiles()
-        users = User.objects.all()
+        users = Profile.objects.all()
+        self.create_tags()
         self.create_questions(users)
         questions = Question.objects.all()
         self.create_answers(users, questions)
-        self.create_tags(questions)
         self.stdout.write(self.style.SUCCESS('SUCCESS'))
