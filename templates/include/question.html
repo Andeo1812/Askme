@@ -12,7 +12,7 @@
             {% endif %}
         </a>
 
-        <a href="{% url "question" question_id=question.id %}" class="btn btn-outline-success"> <b>answers:</b>&nbsp
+        <a href="{% url "question" question_id=question.id %}" class="btn btn-outline-info"> <b>answers:</b>&nbsp
             {% if question.answers == None %}
                 0
             {% else %}
@@ -34,12 +34,24 @@
     </div>
 
     <div class="row">
-        <div class="col-1">
-            <button type="button" class="btn btn-success like"> {{ question.likes }} Like</button>
+        <div class="col-2">
+            <form class="mb-1">
+                {% csrf_token %}
+                <input type="hidden">
+                <button type="button" class="btn btn-success like-q" data-id="{{ question.id }}"> {{ question.likes }} Like</button>
+            </form>
         </div>
+    </div>
 
-        <div class="col-1">
-            <button type="button" class="btn btn-danger dislike"> {{ question.dislikes }} Dis</button>
+    <p></p>
+
+    <div class="row">
+        <div class="col-2">
+            <form class="mb-1">
+                {% csrf_token %}
+                <input type="hidden">
+                 <button type="button" class="btn btn-danger dislike-q"> {{ question.dislikes }} Dis</button>
+            </form>
         </div>
 
         <div class="col-5">
@@ -52,7 +64,7 @@
                     {% include "include/tags.html" %}
                 {% endfor %}
         </div>
-
-        <a class="btn"> <b>date:</b>&nbsp{{ question.pub_date }}</a>
     </div>
+
+    <a class="btn"> <b>Date:</b>&nbsp{{ question.pub_date }}</a>
 </div>

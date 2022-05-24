@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import auth
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 from django.forms.models import model_to_dict
+from django.http import JsonResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from app.models import *
 from app.forms import *
@@ -187,7 +188,10 @@ def user_settings(request):
     return render(request, 'user_settings.html', {"form": form, 'popular_tags': top_tags, 'best_members': users})
 
 
-def vote(request):
-    print(request.GET)
+@login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
+@require_POST
+def like(request):
+    question_id = request.POST['question_id']
+    print(question_id)
     return JsonResponse({'result_code': 0})
 

@@ -25,7 +25,7 @@ urlpatterns = [
 
     path('logout', views.logout_view, name="logout"),
 
-    path('vote/', views.vote, name="like")
+    path('like/', views.like, name="like")
 ]
 
 if settings.DEBUG:
