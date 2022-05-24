@@ -153,6 +153,7 @@ def logout_view(request):
     return redirect(prev)
 
 
+@require_http_methods(["GET", "POST"])
 def signup(request):
     if request.method == 'GET':
         user_form = RegisterForm()
@@ -160,10 +161,9 @@ def signup(request):
         user_form = RegisterForm(data=request.POST)
         if user_form.is_valid():
             form_data = user_form.cleaned_data.pop("password_repeat")
-            form_avatar = user_form.cleaned_data.pop("avatar")
             user = User.objects.create_user(**user_form.cleaned_data)
             user.save()
-            Profile.objects.create(user=user, avatar=form_avatar)
+            Profile.objects.create(user=user)
             auth.login(request, user)
             return redirect("new")
         user_form.add_error('password', "Wrong login/password")
