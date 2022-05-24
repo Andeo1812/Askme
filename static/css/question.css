@@ -41,14 +41,13 @@
 }
 
 .like {
-    margin-left: -15px;
-    width: 40px;
-    height: 40px;
+    margin: -15px;
 }
 
 .dislike {
-    width: 40px;
-    height: 40px;
-
-    transform: rotate(180deg);
+    margin: -15px;
 }
+
+
+
+

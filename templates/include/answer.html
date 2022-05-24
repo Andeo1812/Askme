@@ -9,41 +9,26 @@
     </div>
 
     <div class="row">
-        <div class="col-3">
-            <div class="btn likes-buttons">
-                 <img class="like" src="{% static "img/like.png" %}">
-            </div>
-
-            <span class="text-success">
-                {{ answer.likes }}
-            </span>
-
-            <div class="btn likes-buttons">
-                <img class="dislike" src="{% static "img/like.png" %}">
-            </div>
-
-            <span class="text-danger">
-               {{ answer.dislikes }}
-            </span>
-
+        <p></p>
+        <div class="col-1">
+            <button type="button" class="btn btn-success like"> {{ question.likes }} Like</button>
         </div>
 
-        <div class="col-4 btn">
-            <span>
-                  <p> <b>Author:</b>&nbsp <a href="#################">{{ answer.author }}</a> </p>
-                </span>
+        <div class="col-1">
+            <button type="button" class="btn btn-danger dislike"> {{ question.dislikes }} Dis</button>
         </div>
 
         <div class="col-5">
-            <div class="container">
-                <a class="btn"> <b>Tags:</b></a>
+            <p><b>Author:</b> &nbsp<a href="###########">{{ question.author }}</a> </p>
+        </div>
+
+        <div class="col-5">
+            <a><b>Tags:</b></a>
                 {% for tag in question.tags.all %}
                     {% include "include/tags.html" %}
                 {% endfor %}
-            </div>
         </div>
 
-        <a class="btn"> <b>date:</b>&nbsp{{ answer.pub_date }}</a>
-
+        <a class="btn"> <b>date:</b>&nbsp{{ question.pub_date }}</a>
     </div>
 </div>

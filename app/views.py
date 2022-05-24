@@ -185,3 +185,9 @@ def user_settings(request):
             form.save()
             return redirect(reverse("user_settings"))
     return render(request, 'user_settings.html', {"form": form, 'popular_tags': top_tags, 'best_members': users})
+
+
+def vote(request):
+    print(request.GET)
+    return JsonResponse({'result_code': 0})
+
