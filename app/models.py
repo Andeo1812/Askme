@@ -73,8 +73,6 @@ class Tag(models.Model):
 class Question(models.Model):
     title = models.CharField(max_length=256)
 
-    views = models.IntegerField(default=0)
-
     likes = models.IntegerField(default=0)
 
     dislikes = models.IntegerField(default=0)
@@ -105,8 +103,6 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    views = models.IntegerField(default=0)
-
     likes = models.IntegerField(default=0)
 
     dislikes = models.IntegerField(default=0)

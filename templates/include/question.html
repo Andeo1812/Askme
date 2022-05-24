@@ -1,29 +1,31 @@
 {%  load static %}
 
 <div class="row question {% if one_question %} bottom-border answer-shift{% endif %}">
-    <div class="col-2">
-        <img class="avatar-question" src="{% static "img/1.jpg" %}">
+    <div class="col-2 text-center">
+        <p></p>
 
-        <a class="btn"> <b>votes:</b>&nbsp{{ question.votes }}</a>
+        <img class="avatar-question" src="{{ question.author.avatar.url }}">
+
+        <p></p>
 
         <a href="{% url "question" question_id=question.id %}" class="btn btn-outline-info"> <b>answers:</b>&nbsp {{ question.answers }}</a>
 
-        <a class="btn"> <b>views:</b>&nbsp {{ question.views }}</a>
-
         <p></p>
+
         <form class="mb-1">
             {% csrf_token %}
             <button type="button" class="btn btn-success like-q" data-id="{{ question.id }}"> {{ question.likes }} Like</button>
         </form>
 
-         <p></p>
+        <p></p>
+
         <form class="mb-1">
             {% csrf_token %}
             <button type="button" class="btn btn-danger dislike-q" data-id="{{ question.id }}"> {{ question.dislikes }} Dis</button>
         </form>
     </div>
     <div class="col-md-10 col-lg-10">
-        <h3><a href="{% url "question" question_id=question.id %}" class="text-dark">{{ question.title }}</a></h3>
+        <h3><a class="text-dark">{{ question.title }}</a></h3>
 
         <p>{{ question.text }}</p>
 
