@@ -32,7 +32,7 @@ def hot(request):
     content = paginator.paginate(questions, request, 10)
     content.update({
         "category": "Best questions",
-        "forward_category": "New question",
+        "forward_category": "New questions",
         "popular_tags": top_tags,
         "redirect_new": "new",
         'best_members': users})
