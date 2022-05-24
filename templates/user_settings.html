@@ -4,7 +4,9 @@
 
 
 {% block content %}
-<form action="/profile/edit/" method="post" enctype="multipart/form-data" novalidate>
+<form action="/profile/edit/" method="post" enctype="multipart/form-data">
+    <br><br>
+    <img src="{{ request.user.profile_related.avatar.url }}" style="width: 100px">
         {% csrf_token %}
         {% bootstrap_form form %}
 

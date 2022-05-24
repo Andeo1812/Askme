@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import auth
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+from django.forms.models import model_to_dict
+from django.http import HttpResponse, HttpResponseRedirect
 from app.models import *
 from app.forms import *
 import paginator
@@ -167,15 +170,32 @@ def signup(request):
     return render(request, 'signup.html', {'form': user_form, 'popular_tags': top_tags, 'best_members': users})
 
 
+@login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
+@require_http_methods(["GET", "POST"])
 def user_settings(request):
     if request.method == "GET":
-        _profile = Profile.objects.get(user=request.user)
-        data = {"username": _profile.user.username, "email": _profile.user.email,
-                "first_name": _profile.user.first_name, "last_name": _profile.user.last_name, "avatar": _profile.avatar}
-        form = SettingsForm(data)
+        initial_data = model_to_dict(request.user)
+        initial_data['avatar'] = request.user.profile_related.avatar
+        form = SettingsForm(initial=initial_data)
     else:
-        form = SettingsForm(data=request.POST, files=request.FILES, instance=request.user)
+        initial_data = request.POST
+        instance = request.user
+        form = SettingsForm(initial=initial_data, instance=instance, files=request.FILES)
         if form.is_valid():
             form.save()
             return redirect(reverse("user_settings"))
     return render(request, 'user_settings.html', {"form": form, 'popular_tags': top_tags, 'best_members': users})
+
+
+# def user_settings(request):
+#     if request.method == "GET":
+#         _profile = Profile.objects.get(user=request.user)
+#         data = {"username": _profile.user.username, "email": _profile.user.email,
+#                 "first_name": _profile.user.first_name, "last_name": _profile.user.last_name, "avatar": _profile.avatar}
+#         form = SettingsForm(data)
+#     else:
+#         form = SettingsForm(data=request.POST, files=request.FILES, instance=request.user)
+#         if form.is_valid():
+#             form.save()
+#             return redirect(reverse("user_settings"))
+#     return render(request, 'user_settings.html', {"form": form, 'popular_tags': top_tags, 'best_members': users})

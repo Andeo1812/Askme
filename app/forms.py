@@ -82,10 +82,7 @@ class AnswerForm(forms.ModelForm):
 
 class SettingsForm(forms.ModelForm):
     avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Avatar", required=False)
-    username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="login", max_length=48)
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-group mb-3"}), label="Email", max_length=64)
-    first_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Name", required=False, max_length=64)
-    last_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3"}), label="Surname", required=False, max_length=64)
+    username = forms.CharField(disabled=True)
 
     class Meta:
         model = User
