@@ -3,6 +3,7 @@ main > .container {
 }
 
 .avatar {
+    border-radius: 10px;
     width: 45px;
     height: 45px;
     margin-right: 40px;

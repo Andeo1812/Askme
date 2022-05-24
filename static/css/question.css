@@ -24,7 +24,7 @@
 
 .question {
     border: 1px solid gray;
-    border-radius: 5px;
+    border-radius: 20px;
     margin: 3px;
     padding: 10px;
 }
@@ -35,6 +35,7 @@
 }
 
 .avatar-question {
+    border-radius: 10px;
     width: 90px;
     height: 120px;
     margin-top: 15px;
