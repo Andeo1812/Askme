@@ -192,6 +192,7 @@ def user_settings(request):
 @require_POST
 def like(request):
     question_id = request.POST['question_id']
-    print(question_id)
-    return JsonResponse({'result_code': 0})
+    question = Question.objects.get(id=question_id)
+    question.app_likes()
+    return JsonResponse({'new_likes': question.get_likes()})
 

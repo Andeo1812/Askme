@@ -38,7 +38,6 @@ class QuestionManager(models.Manager):
         return self.order_by('-likes')
 
 
-
 class ProfileManager(models.Manager):
     def get_top_users(self, count=5):
         return self.annotate(answers=Count('profile_related')).order_by('-answers')[:count]
@@ -92,6 +91,10 @@ class Question(models.Model):
 
     def get_likes(self):
         return '%d' % (self.likes)
+
+    def app_likes(self):
+        self.likes += 1
+        self.save()
 
     def answers(self):
         return '%d' % (Answer.objects.filter(question_id=self.id)).count()
