@@ -4,67 +4,43 @@
     <div class="col-2">
         <img class="avatar-question" src="{% static "img/1.jpg" %}">
 
-        <a class="btn"> <b>votes:</b>&nbsp
-            {% if question.votes == None %}
-                0
-            {% else %}
-                {{ question.votes }}
-            {% endif %}
-        </a>
+        <a class="btn"> <b>votes:</b>&nbsp{{ question.votes }}</a>
 
-        <a href="{% url "question" question_id=question.id %}" class="btn btn-outline-info"> <b>answers:</b>&nbsp
-            {% if question.answers == None %}
-                0
-            {% else %}
-                {{ question.answers }}
-            {% endif %}</a>
+        <a href="{% url "question" question_id=question.id %}" class="btn btn-outline-info"> <b>answers:</b>&nbsp {{ question.answers }}</a>
 
-        <a class="btn"> <b>views:</b>&nbsp
-            {% if question.views == None %}
-                0
-            {% else %}
-                {{ question.views }}
-            {% endif %}
-        </a>
+        <a class="btn"> <b>views:</b>&nbsp {{ question.views }}</a>
 
+        <p></p>
+        <form class="mb-1">
+            {% csrf_token %}
+            <button type="button" class="btn btn-success like-q" data-id="{{ question.id }}"> {{ question.likes }} Like</button>
+        </form>
+
+         <p></p>
+        <form class="mb-1">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger dislike-q" data-id="{{ question.id }}"> {{ question.dislikes }} Dis</button>
+        </form>
     </div>
     <div class="col-md-10 col-lg-10">
         <h3><a href="{% url "question" question_id=question.id %}" class="text-dark">{{ question.title }}</a></h3>
+
         <p>{{ question.text }}</p>
+
+        <div class="row">
+            <div class="col-4">
+                <b>Author:</b> &nbsp<a href="###########">{{ question.author }}</a>
+            </div>
+
+            <div class="col-8">
+                <b>Tags:</b> &nbsp<a
+                    {% for tag in question.tags.all %}
+                        {% include "include/tags.html" %}
+                    {% endfor %}
+                </a>
+            </div>
+        </div>
+
     </div>
-
-    <div class="row">
-        <div class="col-2">
-            <form class="mb-1">
-                {% csrf_token %}
-                <input type="hidden">
-                <button type="button" class="btn btn-success like-q" data-id="{{ question.id }}"> {{ question.likes }} Like</button>
-            </form>
-        </div>
-    </div>
-
-    <p></p>
-
-    <div class="row">
-        <div class="col-2">
-            <form class="mb-1">
-                {% csrf_token %}
-                <input type="hidden">
-                 <button type="button" class="btn btn-danger dislike-q"> {{ question.dislikes }} Dis</button>
-            </form>
-        </div>
-
-        <div class="col-5">
-            <p><b>Author:</b> &nbsp<a href="###########">{{ question.author }}</a> </p>
-        </div>
-
-        <div class="col-5">
-            <a><b>Tags:</b></a>
-                {% for tag in question.tags.all %}
-                    {% include "include/tags.html" %}
-                {% endfor %}
-        </div>
-    </div>
-
     <a class="btn"> <b>Date:</b>&nbsp{{ question.pub_date }}</a>
 </div>
