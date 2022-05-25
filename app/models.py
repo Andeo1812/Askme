@@ -100,13 +100,21 @@ class Question(models.Model):
     def dislikes(self):
         return DisLikeQuestion.objects.filter(question__id=self.id).count()
 
-    def up_likes(self, profile):
-        like = LikeQuestion(question_id=self.id, profile=profile)
-        like.save()
+    def like(self, profile):
+        like = LikeQuestion.objects.filter(question_id=self.id, profile=profile)
+        if like:
+            like.delete()
+        else:
+            like = LikeQuestion(question_id=self.id, profile=profile)
+            like.save()
 
-    def down_likes(self, profile):
-        like = LikeQuestion(question__id=self.id, profile=profile)
-        like.delete()
+    def dislike(self, profile):
+        dislike = DisLikeQuestion.objects.filter(question_id=self.id, profile=profile)
+        if dislike:
+            dislike.delete()
+        else:
+            dislike = DisLikeQuestion(question_id=self.id, profile=profile)
+            dislike.save()
 
     def answers(self):
         return Answer.objects.filter(question_id=self.id).count()
@@ -156,6 +164,22 @@ class Answer(models.Model):
 
     def dislikes(self):
         return DisLikeAnswer.objects.filter(answer_id=self.id).count()
+
+    def like(self, profile):
+        like = LikeAnswer.objects.filter(answer_id=self.id, profile=profile)
+        if like:
+            like.delete()
+        else:
+            like = LikeAnswer(answer_id=self.id, profile=profile)
+            like.save()
+
+    def dislike(self, profile):
+        dislike = DisLikeAnswer.objects.filter(answer_id=self.id, profile=profile)
+        if dislike:
+            dislike.delete()
+        else:
+            dislike = DisLikeAnswer(answer_id=self.id, profile=profile)
+            dislike.save()
 
     class Meta:
         verbose_name = "Answer"

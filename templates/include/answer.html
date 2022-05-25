@@ -8,14 +8,14 @@
 
         <form class="mb-1">
             {% csrf_token %}
-            <button type="button" class="btn btn-success like-a" data-id="{{ answer.id }}"> {{ answer.likes }} Likes</button>
+            <button type="button" class="btn btn-success like-answer" data-id="{{ answer.id }}"> {{ answer.likes }} Likes</button>
         </form>
 
         <p></p>
 
         <form class="mb-1">
             {% csrf_token %}
-            <button type="button" class="btn btn-danger dislike-a" data-id="{{ answer.id }}"> {{ answer.dislikes }} Dislikes</button>
+            <button type="button" class="btn btn-danger dislike-answer" data-id="{{ answer.id }}"> {{ answer.dislikes }} Dislikes</button>
         </form>
     </div>
 

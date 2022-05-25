@@ -190,10 +190,35 @@ def user_settings(request):
 
 @login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
 @require_POST
-def like(request):
+def like_question(request):
     question_id = request.POST['question_id']
     question = Question.objects.get(id=question_id)
-    question.up_likes(request.user.profile_related)
-    print(question.likes())
+    question.like(request.user.profile_related)
     return JsonResponse({'likes': question.likes()})
+
+
+@login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
+@require_POST
+def dislike_question(request):
+    question_id = request.POST['question_id']
+    question = Question.objects.get(id=question_id)
+    question.dislike(request.user.profile_related)
+    return JsonResponse({'dislikes': question.dislikes()})
+
+@login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
+@require_POST
+def like_answer(request):
+    answer_id = request.POST['answer_id']
+    answer = Answer.objects.get(id=answer_id)
+    answer.like(request.user.profile_related)
+    return JsonResponse({'likes': answer.likes()})
+
+
+@login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
+@require_POST
+def dislike_answer(request):
+    answer_id = request.POST['answer_id']
+    answer = Answer.objects.get(id=answer_id)
+    answer.dislike(request.user.profile_related)
+    return JsonResponse({'dislikes': answer.dislikes()})
 
