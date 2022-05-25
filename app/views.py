@@ -225,9 +225,7 @@ def dislike_answer(request):
 def correct_answer(request):
     answer_id = request.POST['answer_id']
     answer = Answer.objects.get(id=answer_id)
-    print(answer.correct)
     answer.correct_input()
-    print(answer.correct)
     if (answer.correct):
         return JsonResponse({'correct': 'True'})
     else:
