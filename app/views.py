@@ -165,8 +165,8 @@ def signup(request):
             avatar = user_form.cleaned_data.pop("avatar")
             user = User.objects.create_user(**user_form.cleaned_data)
             user.save()
-            if avatar:
-                Profile.objects.create(user=user, avatar=request.FILES)
+            if avatar is not None:
+                Profile.objects.create(user=user, avatar=avatar)
             else:
                 Profile.objects.create(user=user)
             auth.login(request, user)
