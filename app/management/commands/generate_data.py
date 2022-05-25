@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from app.models import Profile, Question, Answer, Tag
+from app.models import *
 from django.contrib.auth.models import User
 from django.utils.timezone import timezone
 
@@ -18,8 +18,8 @@ class Command(BaseCommand):
     USERS_NEEDS = 10000 // SCALE
     QUESTIONS_NEEDS = 100000 // SCALE
     ANSWERS_NEEDS = 1000000 // SCALE
-    TAGS_NEEDS = 20000 // SCALE
-    LIKES_NEEDS = 200000 // SCALE
+    TAGS_NEEDS = 100000 // SCALE
+    LIKES_NEEDS = 2000000 // SCALE
 
     TITLE_LEN = 10
     MIN_TEXT_LEN = 20
@@ -96,9 +96,6 @@ class Command(BaseCommand):
                 'text': self.create_text_by_word_length(random.randint(self.MIN_TEXT_LEN, self.MAX_TEXT_LEN)),
                 'pub_date': datetime.datetime.now(tz=timezone.utc),
                 'author': profile,
-                'likes': random.randint(0, self.MAX_LIKES),
-                'dislikes': random.randint(0, self.MAX_DISLIKES),
-                'views': random.randint(0, self.MAX_VIEWS)
             }
             return question_fields
 
@@ -117,9 +114,6 @@ class Command(BaseCommand):
                 'pub_date': datetime.datetime.now(tz=timezone.utc),
                 'question': question,
                 'author': profile,
-                'likes': random.randint(0, self.MAX_LIKES),
-                'dislikes': random.randint(0, self.MAX_DISLIKES),
-                'views': random.randint(0, self.MAX_VIEWS)
             }
             return answer_fields
 
@@ -135,22 +129,100 @@ class Command(BaseCommand):
         Answer.objects.bulk_create(answers_set)
 
     def create_tags(self):
-        tag = Tag(name=random.choice(self.text_dataset))
-        tag.save()
-        for i in range(self.TAGS_NEEDS):
-            type_insertion = random.choice([0, 1])
-            if type_insertion == 1:
-                tags = Tag.objects.all()
-                choiced = random.choice(tags)
-                choiced.save()
-            if type_insertion == 0:
-                tag = Tag(name=random.choice(self.text_dataset))
-                tag.save()
+        tags_created_indicate = self.TAGS_NEEDS
+        tags_set = []
 
-    def questions_set_tags(self, questions, tags):
+        while tags_created_indicate > 0:
+            tag = Tag(name=self.text_dataset.pop(random.randint(0, len(self.text_dataset) - 1)))
+            tags_set.append(tag)
+            tags_created_indicate -= 11
+
+        Tag.objects.bulk_create(tags_set)
+
+    def set_tags(self, questions, tags):
         for question in questions:
             for i in range(self.MAX_TAGS):
                 question.tags.add(random.choice(tags))
+
+    def create_likes_question(self, profiles, questions):
+        def create_like(profile, question):
+            like_fields = {
+                'profile': profile,
+                'question': question
+            }
+            return like_fields
+
+        likes_created_indicate = self.LIKES_NEEDS
+        likes_set = []
+        while likes_created_indicate > 0:
+            one_question_like_amount = random.randint(0, self.MAX_LIKES)
+            likes_created_indicate -= one_question_like_amount
+            question = random.choice(questions)
+            for i in range(one_question_like_amount):
+                like = LikeQuestion(**create_like(random.choice(profiles), question))
+                likes_set.append(like)
+
+        LikeQuestion.objects.bulk_create(likes_set)
+
+    def create_dislikes_question(self, profiles, questions):
+        def create_dislike(profile, question):
+            dislike_fields = {
+                'profile': profile,
+                'question': question
+            }
+            return dislike_fields
+
+        dislikes_created_indicate = self.LIKES_NEEDS
+        dislikes_set = []
+        while dislikes_created_indicate > 0:
+            one_question_dislike_amount = random.randint(0, self.MAX_LIKES)
+            dislikes_created_indicate -= one_question_dislike_amount
+            question = random.choice(questions)
+            for i in range(one_question_dislike_amount):
+                dislike = DisLikeQuestion(**create_dislike(random.choice(profiles), question))
+                dislikes_set.append(dislike)
+
+        DisLikeQuestion.objects.bulk_create(dislikes_set)
+
+    def create_likes_answer(self, profiles, answers):
+        def create_like(profile, answer):
+            like_fields = {
+                'profile': profile,
+                'answer': answer
+            }
+            return like_fields
+
+        likes_created_indicate = self.LIKES_NEEDS
+        likes_set = []
+        while likes_created_indicate > 0:
+            one_answer_like_amount = random.randint(0, self.MAX_LIKES)
+            likes_created_indicate -= one_answer_like_amount
+            answer = random.choice(answers)
+            for i in range(one_answer_like_amount):
+                like = LikeAnswer(**create_like(random.choice(profiles), answer))
+                likes_set.append(like)
+
+        LikeAnswer.objects.bulk_create(likes_set)
+
+    def create_dislikes_answer(self, profiles, answers):
+        def create_dislike(profile, answer):
+            dislike_fields = {
+                'profile': profile,
+                'answer': answer
+            }
+            return dislike_fields
+
+        dislikes_created_indicate = self.LIKES_NEEDS
+        dislikes_set = []
+        while dislikes_created_indicate > 0:
+            one_answer_dislike_amount = random.randint(0, self.MAX_LIKES)
+            dislikes_created_indicate -= one_answer_dislike_amount
+            answer = random.choice(answers)
+            for i in range(one_answer_dislike_amount):
+                dislike = DisLikeAnswer(**create_dislike(random.choice(profiles), answer))
+                dislikes_set.append(dislike)
+
+        DisLikeAnswer.objects.bulk_create(dislikes_set)
 
     def handle(self, *args, **options):
         self.create_users_and_ref_profiles()
@@ -159,8 +231,12 @@ class Command(BaseCommand):
         self.create_tags()
         self.create_questions(users)
         questions = Question.objects.all()
-        self.questions_set_tags(questions, tags)
+        self.create_likes_question(users, questions)
+        self.create_dislikes_question(users, questions)
+        self.set_tags(questions, tags)
         self.create_answers(users, questions)
         answers = Answer.objects.all()
-        self.questions_set_tags(answers, tags)
+        self.create_likes_answer(users, answers)
+        self.create_dislikes_answer(users, answers)
+        self.set_tags(answers, tags)
         self.stdout.write(self.style.SUCCESS('SUCCESS'))

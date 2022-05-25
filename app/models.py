@@ -72,10 +72,6 @@ class Tag(models.Model):
 class Question(models.Model):
     title = models.CharField(max_length=256)
 
-    likes = models.IntegerField(default=0)
-
-    dislikes = models.IntegerField(default=0)
-
     text = models.TextField()
 
     pub_date = models.DateTimeField(default=timezone.now)
@@ -89,11 +85,13 @@ class Question(models.Model):
     def __str__(self):
         return self.title
 
-    def get_likes(self):
-        return '%d' % (self.likes)
+    def likes(self):
+        return LikeQuestion.objects.filter(question__id=self.id).count()
+
+    def dislikes(self):
+        return DisLikeQuestion.objects.filter(question__id=self.id).count()
 
     def app_likes(self):
-        self.likes += 1
         self.save()
 
     def answers(self):
@@ -105,11 +103,23 @@ class Question(models.Model):
         ordering = ['-pub_date']
 
 
+class LikeQuestion(models.Model):
+    question = models.ForeignKey(Question, related_name="question_like", on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.profile.user.username} {self.question.title}"
+
+
+class DisLikeQuestion(models.Model):
+    question = models.ForeignKey(Question, related_name="question_dislike", on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.profile.user.username} {self.question.title}"
+
+
 class Answer(models.Model):
-    likes = models.IntegerField(default=0)
-
-    dislikes = models.IntegerField(default=0)
-
     text = models.TextField()
 
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -127,10 +137,29 @@ class Answer(models.Model):
     def __str__(self):
         return '%s' % (self.author.user.username)
 
-    def get_likes(self):
-        return self.likes
+    def likes(self):
+        return LikeAnswer.objects.filter(answer_id=self.id).count()
+
+    def dislikes(self):
+        return DisLikeAnswer.objects.filter(answer_id=self.id).count()
 
     class Meta:
         verbose_name = "Answer"
         verbose_name_plural = "Answers"
         ordering = ['-pub_date']
+
+
+class LikeAnswer(models.Model):
+    answer = models.ForeignKey(Answer, related_name="answer_like", on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.profile.user.username} {self.answer.question.title}"
+
+
+class DisLikeAnswer(models.Model):
+    answer = models.ForeignKey(Answer, related_name="answer_dislike", on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.profile.user.username} {self.answer.question.title}"
