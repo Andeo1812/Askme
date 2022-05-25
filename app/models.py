@@ -4,10 +4,12 @@ from django.contrib.auth.models import User
 from django.db.models import Count, Sum
 from django.utils import timezone
 
+import heapq
+
 
 class TagManager(models.Manager):
     def top_tags(self, count=5):
-        return self.annotate(count=Count('tag_related')).order_by('-count')[:count]
+        return self.annotate(questions=Count('tag_related')).order_by('-questions')[:count]
 
 
 class AnswerManager(models.Manager):
@@ -35,7 +37,14 @@ class QuestionManager(models.Manager):
         return self.order_by('-pub_date')
 
     def hot(self):
-        return self.order_by('-likes')
+        heap = []
+        questions = Question.objects.all()
+        for question in questions:
+            heap.append(question)
+
+        heap.sort(key=lambda x: x.likes(), reverse=True)
+
+        return heap
 
 
 class ProfileManager(models.Manager):
@@ -91,11 +100,16 @@ class Question(models.Model):
     def dislikes(self):
         return DisLikeQuestion.objects.filter(question__id=self.id).count()
 
-    def app_likes(self):
-        self.save()
+    def up_likes(self, profile):
+        like = LikeQuestion(question_id=self.id, profile=profile)
+        like.save()
+
+    def down_likes(self, profile):
+        like = LikeQuestion(question__id=self.id, profile=profile)
+        like.delete()
 
     def answers(self):
-        return '%d' % (Answer.objects.filter(question_id=self.id)).count()
+        return Answer.objects.filter(question_id=self.id).count()
 
     class Meta:
         verbose_name = "Question"

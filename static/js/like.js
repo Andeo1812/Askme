@@ -30,7 +30,7 @@ const csrftoken = getCookie('csrftoken');
     );
     fetch(request).then(function (response) {
         response.json().then(function (parsed) {
-            $this.text(parsed.new_likes + ' Likes');
+            $this.text(parsed.likes + ' Likes');
         });
     })
 })

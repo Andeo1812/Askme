@@ -6,6 +6,7 @@ from django.utils.timezone import timezone
 import requests
 import random
 import datetime
+import copy
 
 
 class Command(BaseCommand):
@@ -15,10 +16,10 @@ class Command(BaseCommand):
     PARAGRAPHS_AMOUNT = 1
 
     SCALE = 1000
-    USERS_NEEDS = 10000 // SCALE
-    QUESTIONS_NEEDS = 100000 // SCALE
+    USERS_NEEDS = 100000 // SCALE
+    QUESTIONS_NEEDS = 1000000 // SCALE
     ANSWERS_NEEDS = 1000000 // SCALE
-    TAGS_NEEDS = 100000 // SCALE
+    TAGS_NEEDS = 10000 // SCALE
     LIKES_NEEDS = 2000000 // SCALE
 
     TITLE_LEN = 10
@@ -26,9 +27,9 @@ class Command(BaseCommand):
     MAX_TEXT_LEN = 100
     MAX_ANSWERS = 10
     MAX_TAGS = 3
-    MAX_LIKES = 40
-    MAX_DISLIKES = 10
-    MAX_VIEWS = 100
+
+    MAX_LIKES = USERS_NEEDS
+    MAX_DISLIKES = 5
 
     def __init__(self):
         super().__init__()
@@ -74,7 +75,6 @@ class Command(BaseCommand):
                 'is_active': True,
                 'is_superuser': False,
                 'last_login': datetime.datetime.now(tz=timezone.utc),
-                'date_joined': datetime.date.today()
             }
             return user_dict_repr
 
@@ -135,7 +135,7 @@ class Command(BaseCommand):
         while tags_created_indicate > 0:
             tag = Tag(name=self.text_dataset.pop(random.randint(0, len(self.text_dataset) - 1)))
             tags_set.append(tag)
-            tags_created_indicate -= 11
+            tags_created_indicate -= 1
 
         Tag.objects.bulk_create(tags_set)
 
@@ -156,10 +156,17 @@ class Command(BaseCommand):
         likes_set = []
         while likes_created_indicate > 0:
             one_question_like_amount = random.randint(0, self.MAX_LIKES)
+
             likes_created_indicate -= one_question_like_amount
-            question = random.choice(questions)
+
+            rand_profile = profiles.pop(random.randint(0, len(profiles) - 1))
+
+            copy_question = copy.copy(questions)
             for i in range(one_question_like_amount):
-                like = LikeQuestion(**create_like(random.choice(profiles), question))
+                rand_question = copy_question.pop(random.randint(0, len(copy_question) - 1))
+
+                like = LikeQuestion(**create_like(rand_profile, rand_question))
+
                 likes_set.append(like)
 
         LikeQuestion.objects.bulk_create(likes_set)
@@ -176,10 +183,17 @@ class Command(BaseCommand):
         dislikes_set = []
         while dislikes_created_indicate > 0:
             one_question_dislike_amount = random.randint(0, self.MAX_LIKES)
+
             dislikes_created_indicate -= one_question_dislike_amount
-            question = random.choice(questions)
+
+            rand_profile = profiles.pop(random.randint(0, len(profiles) - 1))
+
+            copy_question = copy.copy(questions)
             for i in range(one_question_dislike_amount):
-                dislike = DisLikeQuestion(**create_dislike(random.choice(profiles), question))
+                rand_question = copy_question.pop(random.randint(0, len(copy_question) - 1))
+
+                dislike = DisLikeQuestion(**create_dislike(rand_profile, rand_question))
+
                 dislikes_set.append(dislike)
 
         DisLikeQuestion.objects.bulk_create(dislikes_set)
@@ -196,10 +210,17 @@ class Command(BaseCommand):
         likes_set = []
         while likes_created_indicate > 0:
             one_answer_like_amount = random.randint(0, self.MAX_LIKES)
+
             likes_created_indicate -= one_answer_like_amount
-            answer = random.choice(answers)
+
+            rand_profile = profiles.pop(random.randint(0, len(profiles) - 1))
+
+            copy_answers = copy.copy(answers)
             for i in range(one_answer_like_amount):
-                like = LikeAnswer(**create_like(random.choice(profiles), answer))
+                rand_answer = copy_answers.pop(random.randint(0, len(copy_answers) - 1))
+
+                like = LikeAnswer(**create_like(rand_profile, rand_answer))
+
                 likes_set.append(like)
 
         LikeAnswer.objects.bulk_create(likes_set)
@@ -216,27 +237,51 @@ class Command(BaseCommand):
         dislikes_set = []
         while dislikes_created_indicate > 0:
             one_answer_dislike_amount = random.randint(0, self.MAX_LIKES)
+
             dislikes_created_indicate -= one_answer_dislike_amount
-            answer = random.choice(answers)
+
+            rand_profile = profiles.pop(random.randint(0, len(profiles) - 1))
+
+            copy_answers = copy.copy(answers)
             for i in range(one_answer_dislike_amount):
-                dislike = DisLikeAnswer(**create_dislike(random.choice(profiles), answer))
+                rand_answer = copy_answers.pop(random.randint(0, len(copy_answers) - 1))
+
+                dislike = DisLikeAnswer(**create_dislike(rand_profile, rand_answer))
+
                 dislikes_set.append(dislike)
 
         DisLikeAnswer.objects.bulk_create(dislikes_set)
 
     def handle(self, *args, **options):
         self.create_users_and_ref_profiles()
-        users = Profile.objects.all()
+        profiles = Profile.objects.all()
         tags = Tag.objects.all()
         self.create_tags()
-        self.create_questions(users)
+
+        self.create_questions(profiles)
         questions = Question.objects.all()
-        self.create_likes_question(users, questions)
-        self.create_dislikes_question(users, questions)
         self.set_tags(questions, tags)
-        self.create_answers(users, questions)
+
+        self.create_answers(profiles, questions)
         answers = Answer.objects.all()
-        self.create_likes_answer(users, answers)
-        self.create_dislikes_answer(users, answers)
         self.set_tags(answers, tags)
+
+        list_profiles = []
+        for profile in profiles:
+            list_profiles.append(profile)
+
+        list_questions = []
+        for question in Question.objects.all():
+            list_questions.append(question)
+
+        list_answers = []
+        for answer in Answer.objects.all():
+            list_answers.append(answer)
+
+        self.create_likes_question(copy.copy(list_profiles), list_questions)
+        self.create_dislikes_question(list_profiles, list_questions)
+
+        self.create_likes_answer(copy.copy(list_profiles), list_answers)
+        self.create_dislikes_answer(copy.copy(list_profiles), list_answers)
+
         self.stdout.write(self.style.SUCCESS('SUCCESS'))
