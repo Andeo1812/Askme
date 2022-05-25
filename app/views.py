@@ -179,9 +179,7 @@ def user_settings(request):
         initial_data['avatar'] = request.user.profile_related.avatar
         form = SettingsForm(initial=initial_data)
     else:
-        initial_data = request.POST
-        instance = request.user
-        form = SettingsForm(initial=initial_data, instance=instance, files=request.FILES)
+        form = SettingsForm(data=request.POST, files=request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect(reverse("user_settings"))
