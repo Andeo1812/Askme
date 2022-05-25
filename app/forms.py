@@ -97,7 +97,8 @@ class SettingsForm(forms.ModelForm):
         }
 
     def save(self, *args, **kwargs):
-        user = super().save()
-        user.profile_related.avatar = self.cleaned_data['avatar']
-        user.profile_related.save()
+        user = super().save(*args, *kwargs)
+        if (self.cleaned_data['avatar']):
+            user.profile_related.avatar = self.cleaned_data['avatar']
+            user.save()
         return user
