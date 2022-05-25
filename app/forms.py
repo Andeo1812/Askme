@@ -104,6 +104,7 @@ class AnswerForm(forms.ModelForm):
 class SettingsForm(forms.ModelForm):
     avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Avatar", required=False)
     username = forms.CharField(disabled=True)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-group mb-3"}), label="Email", max_length=64)
 
     class Meta:
         model = User
@@ -124,5 +125,5 @@ class SettingsForm(forms.ModelForm):
         user = super().save(*args, *kwargs)
         if (self.cleaned_data['avatar']):
             user.profile_related.avatar = self.cleaned_data['avatar']
-            user.save()
+            user.profile_related.save()
         return user
