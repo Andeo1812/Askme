@@ -110,7 +110,6 @@ def ask(request):
                 question.tags.add(new)
             question.save()
             return redirect("question", question_id=question.id)
-        form.save()
 
     return render(request, 'ask.html',
                   {'form': form, 'popular_tags': top_tags, 'best_members': users, "key": "authorized"})

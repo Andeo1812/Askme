@@ -63,6 +63,24 @@ class AskForm(forms.ModelForm):
             "text": forms.Textarea(attrs={"class": "form-group mb-3", "placeholder": "Peculiarities of C++ multithreading?"})
         }
 
+    def clean_tag_list(self):
+        data = self.data['tag_list']
+        if len(data) > 63:
+            raise ValidationError("Tags should be less then 64 symbols.")
+        return data
+
+    def clean_title(self):
+        data = self.data['title']
+        if len(data) > 127:
+            raise ValidationError("Title should be less then 128 symbols.")
+        return data
+
+    def clean_text(self):
+        data = self.data['text']
+        if len(data) > 2027:
+            raise ValidationError("Description should be less then 2028 symbols.")
+        return data
+
 
 class AnswerForm(forms.ModelForm):
     tag_list = forms.CharField(widget=forms.TextInput(attrs={"class": "form-group mb-3",
@@ -75,6 +93,12 @@ class AnswerForm(forms.ModelForm):
         widgets = {
             "text": forms.Textarea(attrs={"class": "form-group mb-3", "placeholder": "Input your answer"})
         }
+
+    def clean_text(self):
+        data = self.data['text']
+        if len(data) > 2027:
+            raise ValidationError("Description should be less then 2028 symbols.")
+        return data
 
 
 class SettingsForm(forms.ModelForm):
