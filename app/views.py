@@ -162,9 +162,13 @@ def signup(request):
         user_form = RegisterForm(data=request.POST)
         if user_form.is_valid():
             form_data = user_form.cleaned_data.pop("password_repeat")
+            avatar = user_form.cleaned_data.pop("avatar")
             user = User.objects.create_user(**user_form.cleaned_data)
             user.save()
-            Profile.objects.create(user=user)
+            if avatar:
+                Profile.objects.create(user=user, avatar=request.FILES)
+            else:
+                Profile.objects.create(user=user)
             auth.login(request, user)
             return redirect("new")
         user_form.add_error('password', "Wrong login/password")

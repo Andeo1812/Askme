@@ -27,6 +27,8 @@ class RegisterForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Password', max_length=64)
     password_repeat = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-group mb-3"}), label='Repeat password', max_length=64)
 
+    avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Avatar", required=False)
+
     def clean_password(self):
         data = self.data['password']
         if len(data) < 9:
