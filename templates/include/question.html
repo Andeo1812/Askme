@@ -24,17 +24,17 @@
             <button type="button" class="btn btn-danger dislike-question" data-id="{{ question.id }}"> {{ question.dislikes }} Dislikes</button>
         </form>
     </div>
-    <div class="col-md-10 col-lg-10">
+    <div class="col-10">
         <h3><a class="text-dark">{{ question.title }}</a></h3>
 
         <p>{{ question.text }}</p>
 
         <div class="row">
-            <div class="col-4">
+            <div class="col-5">
                 <b>Author:</b> &nbsp<a href="###########">{{ question.author }}</a>
             </div>
 
-            <div class="col-8">
+            <div class="col-7">
                 <b>Tags:</b> &nbsp<a
                     {% for tag in question.tags.all %}
                         {% include "include/tags.html" %}

@@ -5,8 +5,8 @@
     padding: 10px;
 }
 
-.answer-best {
-    border: 3px solid green;
+.answer-correct {
+    border: 5px green;
     border-radius: 20px;
     margin: 20px;
     padding: 10px;
@@ -22,4 +22,7 @@
 }
 
 .dislike-answer {
+}
+
+.correct-answer {
 }

@@ -181,6 +181,14 @@ class Answer(models.Model):
             dislike = DisLikeAnswer(answer_id=self.id, profile=profile)
             dislike.save()
 
+    def correct_input(self):
+        if self.correct:
+            self.correct = False
+            self.save()
+        else:
+            self.correct = True
+            self.save()
+
     class Meta:
         verbose_name = "Answer"
         verbose_name_plural = "Answers"

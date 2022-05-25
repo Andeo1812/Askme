@@ -219,3 +219,13 @@ def dislike_answer(request):
     answer.dislike(request.user.profile_related)
     return JsonResponse({'dislikes': answer.dislikes()})
 
+
+@login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
+@require_POST
+def correct_answer(request):
+    answer_id = request.POST['answer_id']
+    answer = Answer.objects.get(id=answer_id)
+    print(answer.correct)
+    answer.correct_input()
+    print(answer.correct)
+    return JsonResponse({'correct': answer.correct})
