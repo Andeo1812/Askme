@@ -15,7 +15,6 @@ users = Profile.objects.get_top_users(count=6)
 
 top_tags = Tag.objects.top_tags(count=6)
 
-
 def index(request):
     questions = Question.objects.new()
     content = paginator.paginate(questions, request, 10)
