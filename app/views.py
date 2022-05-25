@@ -15,6 +15,7 @@ users = Profile.objects.get_top_users(count=6)
 
 top_tags = Tag.objects.top_tags(count=6)
 
+
 def index(request):
     questions = Question.objects.new()
     content = paginator.paginate(questions, request, 10)
@@ -38,6 +39,7 @@ def hot(request):
     return render(request, 'index.html', content)
 
 
+@require_http_methods(["GET", "POST"])
 def question(request, question_id):
     cache.set(REDIRECT_FIELD_NAME, request.path)
     if request.method == 'POST':
@@ -65,13 +67,13 @@ def question(request, question_id):
         else:
             form = AnswerForm()
             content = paginator.paginate(answers, request, 5)
-            content.update({'question': question,
-                            "one_question:": "yes",
-                            'popular_tags': top_tags,
-                            'answers': paginator.paginate(answers, request, 5),
-                            'best_members': users,
-                            "form": form
-                            })
+    content.update({'question': question,
+                    "one_question:": "yes",
+                    'popular_tags': top_tags,
+                    'answers': paginator.paginate(answers, request, 5),
+                    'best_members': users,
+                    "form": form
+                    })
     return render(request, "question_page.html", content)
 
 
@@ -200,6 +202,7 @@ def dislike_question(request):
     question = Question.objects.get(id=question_id)
     question.dislike(request.user.profile_related)
     return JsonResponse({'dislikes': question.dislikes()})
+
 
 @login_required(login_url="login", redirect_field_name=REDIRECT_FIELD_NAME)
 @require_POST
