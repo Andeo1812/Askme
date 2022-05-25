@@ -228,4 +228,7 @@ def correct_answer(request):
     print(answer.correct)
     answer.correct_input()
     print(answer.correct)
-    return JsonResponse({'correct': answer.correct})
+    if (answer.correct):
+        return JsonResponse({'correct': 'True'})
+    else:
+        return JsonResponse({'correct': 'False'})

@@ -17,6 +17,14 @@
             {% csrf_token %}
             <button type="button" class="btn btn-danger dislike-answer" data-id="{{ answer.id }}"> {{ answer.dislikes }} Dislikes</button>
         </form>
+
+        <p></p>
+
+        <form class="mb-1">
+                {% csrf_token %}
+                <button {% if request.user.profile_related == answer.author %} type="button" {% endif %}
+                        class="btn btn-outline-primary correct-answer" data-id="{{ answer.id }}">{{ answer.correct }}</button>
+            </form>
     </div>
 
     <div class="col-10">
@@ -38,18 +46,7 @@
     </div>
 
 
-    <div class="row">
-        <div class="col-8 text-center">
-            <a class="btn"> <b>Date:</b>&nbsp{{ question.pub_date }}</a>
-        </div>
-
-        <div class="col-2">
-                {% if request.user.profile_related == answer.author%}
-                    <form class="mb-1">
-                        {% csrf_token %}
-                        <button type="button" class="btn btn-outline-primary correct-answer" data-id="{{ answer.id }}">Correct</button>
-                    </form>
-                {% endif %}
-        </div>
+    <div class="row text-center">
+         <a class="btn"> <b>Date:</b>&nbsp{{ question.pub_date }}</a>
     </div>
 </div>
