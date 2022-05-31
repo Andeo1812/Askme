@@ -159,16 +159,12 @@ def signup(request):
     if request.method == 'GET':
         user_form = RegisterForm()
     elif request.method == 'POST':
-        user_form = RegisterForm(data=request.POST)
+        user_form = RegisterForm(data=request.POST, files=request.FILES)
         if user_form.is_valid():
             form_data = user_form.cleaned_data.pop("password_repeat")
-            avatar = user_form.cleaned_data.pop("avatar")
+            form_avatar = user_form.cleaned_data.pop("avatar")
             user = User.objects.create_user(**user_form.cleaned_data)
-            user.save()
-            if avatar is not None:
-                Profile.objects.create(user=user, avatar=avatar)
-            else:
-                Profile.objects.create(user=user)
+            Profile.objects.create(user=user, avatar=form_avatar)
             auth.login(request, user)
             return redirect("new")
         user_form.add_error('password', "Wrong login/password")
