@@ -1,7 +1,7 @@
 $(".correct-answer").on('click', function (ev) {
     const $this = $(this);
     const request = new Request(
-        'http://127.0.0.1:8000/correct_answer/',
+        'http://127.0.0.1:80/correct_answer/',
         {
             method: 'post',
             headers: {

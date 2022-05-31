@@ -1,7 +1,7 @@
 $(".like-question").on('click', function (ev) {
     const $this = $(this);
     const request = new Request(
-        'http://127.0.0.1:8000/like_question/',
+        'http://127.0.0.1:80/like_question/',
         {
             method: 'post',
             headers: {
@@ -21,7 +21,7 @@ $(".like-question").on('click', function (ev) {
 $(".dislike-question").on('click', function (ev) {
     const $this = $(this);
     const request = new Request(
-        'http://127.0.0.1:8000/dislike_question/',
+        'http://127.0.0.1:80/dislike_question/',
         {
             method: 'post',
             headers: {
