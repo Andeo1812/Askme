@@ -164,7 +164,10 @@ def signup(request):
             form_data = user_form.cleaned_data.pop("password_repeat")
             form_avatar = user_form.cleaned_data.pop("avatar")
             user = User.objects.create_user(**user_form.cleaned_data)
-            Profile.objects.create(user=user, avatar=form_avatar)
+            if form_avatar:
+                Profile.objects.create(user=user, avatar=form_avatar)
+            else:
+                Profile.objects.create(user=user)
             auth.login(request, user)
             return redirect("new")
         user_form.add_error('password', "Wrong login/password")
