@@ -5,7 +5,8 @@ from urllib.parse import parse_qs
 
 bind = "127.0.0.1:8080"
 
-def app(environ, start_response):
+
+def application(environ, start_response):
     """Simplest possible application object"""
     print(environ)
     res = [str.encode(environ['REQUEST_METHOD'] + ":\n")]
