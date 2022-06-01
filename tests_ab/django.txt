@@ -1,0 +1,36 @@
+Server Software:        WSGIServer/0.2
+Server Hostname:        127.0.0.1
+Server Port:            8000
+
+Document Path:          /
+Document Length:        24496 bytes
+
+Concurrency Level:      4
+Time taken for tests:   34.879 seconds
+Complete requests:      500
+Failed requests:        0
+Total transferred:      12481500 bytes
+HTML transferred:       12248000 bytes
+Requests per second:    14.34 [#/sec] (mean)
+Time per request:       279.035 [ms] (mean)
+Time per request:       69.759 [ms] (mean, across all concurrent requests)
+Transfer rate:          349.46 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:    58  278  84.3    263     476
+Waiting:       56  271  83.1    258     466
+Total:         58  278  84.3    263     476
+
+Percentage of the requests served within a certain time (ms)
+  50%    263
+  66%    322
+  75%    350
+  80%    366
+  90%    399
+  95%    420
+  98%    443
+  99%    456
+ 100%    476 (longest request)
+
