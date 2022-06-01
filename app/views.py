@@ -132,6 +132,8 @@ def login(request):
             if user is not None:
                 auth.login(request, user)
                 next_url = cache.get(REDIRECT_FIELD_NAME)
+                if next_url is None:
+                    next_url = "new"
                 cache.delete(REDIRECT_FIELD_NAME)
                 return redirect(next_url)
             user_form.add_error('password', "Not such Login/Password")
