@@ -49,17 +49,17 @@ def question(request, question_id):
         except Exception:
             return render(request, 'not_found.html', {"hot_page": "Best questions",
                                                       "new_page": "New questions",
-                                                      "popular_tags": Tag.objects.top_tags(),
-                                                      'top_users': users,
+                                                      "popular_tags": top_tags,
+                                                      'best_members': users,
                                                       })
         else:
             form = AnswerForm()
-            content = paginator.paginate(answers, request, 3)
+            content = paginator.paginate(answers, request, )
             content.update({'question': question,
                             "one_question:": "yes",
-                            'popular_tags': Tag.objects.top_tags(),
-                            'answers': paginator.paginate(answers, request, 3),
-                            'top_users': users,
+                            'popular_tags': top_tags,
+                            'answers': paginator.paginate(answers, request, 5),
+                            'best_members': users,
                             "form": form
                             })
         return render(request, "question_page.html", content)
