@@ -43,6 +43,7 @@ def hot(request):
 def question(request, question_id):
     print(request.method)
     print('Start')
+    cache.set(REDIRECT_FIELD_NAME, request.path)
     if request.method == 'GET':
         question = Question.objects.get_by_id(question_id)
         answers = Answer.objects.answer_by_question(question_id)
@@ -57,19 +58,15 @@ def question(request, question_id):
         print('Get')
         return render(request, "question_page.html", content)
     elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            next = f"/question/{question_id}"
+            return redirect("login")
         print('POST')
         form = AnswerForm(data=request.POST)
         if form.is_valid():
             author = Profile.objects.get(user=request.user)
             question = Question.objects.get(id=question_id)
-            ans = Answer.objects.create(author=author, question=question, text=form.cleaned_data['text'])
-            ans.save()
-            print(form.cleaned_data['tag_list'])
-            for tag in form.cleaned_data['tag_list'].split():
-                new = Tag.objects.get_or_create(name=tag)[0]
-                print(tag)
-                ans.tags.add(new)
-                ans.save()
+            form.save(author, question)
             return redirect("question", question_id=question_id)
 
 
@@ -226,7 +223,7 @@ def dislike_answer(request):
 def correct_answer(request):
     answer_id = request.POST['answer_id']
     answer = Answer.objects.get(id=answer_id)
-    if answer.author == request.user.profile_related:
+    if answer.question.author == request.user.profile_related:
         answer.correct_input()
         if (answer.correct):
             return JsonResponse({'correct': 'True'})

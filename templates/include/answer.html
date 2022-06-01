@@ -21,7 +21,7 @@
         <p></p>
 
         <form class="mb-1">
-            {% if request.user.profile_related == answer.author %}
+            {% if answer.question.author == request.user.profile_related %}
             {% csrf_token %}
                 <button type="button" class="btn btn-outline-primary correct-answer"
                         data-id="{{ answer.id }}">{{ answer.correct }}</button>

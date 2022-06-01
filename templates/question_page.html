@@ -15,10 +15,10 @@
 {% endfor %}
 
 <div>
-    <form name="answer" method="post" action="/question/{{ question.id }}/">
+    <form method="post" action="/question/{{ question.id }}/">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <button class="btn btn-primary mb-5" name="answer" type="submit">Post your answer</button>
+        <button class="btn btn-primary mb-5" type="submit">Post your answer</button>
     </form>
 </div>
 
