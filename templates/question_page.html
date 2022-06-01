@@ -8,11 +8,13 @@
 
 {% include "include/question.html" %}
 
+<hr class="answer-hr">
+
 {% for answer in page_object.object_list %}
     {% include "include/answer.html" %}
 {% endfor %}
 
-<form action="/question/{{ question.id }}/" method="post">
+<form action="/question/{{ question.id }}/" method="POST">
     {% csrf_token %}
     {% bootstrap_form form %}
     <button type="submit" class="btn btn-primary mb-5">Post your answer</button>

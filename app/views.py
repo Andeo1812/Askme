@@ -42,17 +42,26 @@ def hot(request):
 @require_http_methods(["GET", "POST"])
 def question(request, question_id):
     cache.set(REDIRECT_FIELD_NAME, request.path)
-    if request.method == "GET":
-        question = Question.objects.get_by_id(question_id)
-        answers = Answer.objects.answer_by_question(question_id)
-        form = AnswerForm()
-        content = paginator.paginate(answers, request, 5)
-        content.update({'question': question,
-                    "one_question:": "yes",
-                    "popular_tags": top_tags,
-                    'answers': paginator.paginate(answers, request, 5),
-                    'best_members': users,
-                    "form": form})
+    if request.method == 'GET':
+        try:
+            question = Question.objects.get_by_id(question_id)
+            answers = Answer.objects.answer_by_question(question_id)
+        except Exception:
+            return render(request, 'not_found.html', {"hot_page": "Best questions",
+                                                      "new_page": "New questions",
+                                                      "popular_tags": top_tags,
+                                                      'top_users': users,
+                                                      })
+        else:
+            form = AnswerForm()
+            content = paginator.paginate(answers, request, )
+            content.update({'question': question,
+                            "one_question:": "yes",
+                            'popular_tags': top_tags,
+                            'answers': paginator.paginate(answers, request, 5),
+                            'top_users': users,
+                            "form": form
+                            })
         return render(request, "question_page.html", content)
     elif request.method == 'POST':
         if not request.user.is_authenticated:
