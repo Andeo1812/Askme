@@ -16,7 +16,6 @@ def app(environ, start_response):
     body = environ['wsgi.input'].read(int(environ.get('CONTENT_LENGTH', 0)))
     print(body.decode())
     res.append(body)
-    # print(res)
     status = '200 OK'
     response_headers = [
         ('Content-type', 'text/plain'),
