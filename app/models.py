@@ -8,7 +8,7 @@ import heapq
 
 
 class TagManager(models.Manager):
-    def top_tags(self, count=5):
+    def top_tags(self, count=6):
         return self.annotate(questions=Count('tag_related')).order_by('-questions')[:count]
 
 
@@ -48,7 +48,7 @@ class QuestionManager(models.Manager):
 
 
 class ProfileManager(models.Manager):
-    def get_top_users(self, count=5):
+    def get_top_users(self, count=6):
         return self.annotate(answers=Count('profile_related')).order_by('-answers')[:count]
 
 

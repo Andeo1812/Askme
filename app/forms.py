@@ -102,6 +102,18 @@ class AnswerForm(forms.ModelForm):
             raise ValidationError("Description should be less then 2028 symbols.")
         return data
 
+    def save(self, profile, question):
+        ans = Answer.objects.create(author=profile, question=question, text=self.cleaned_data['text'])
+        ans.save()
+        print(self.cleaned_data['tag_list'])
+        for tag in self.cleaned_data['tag_list'].split():
+            new = Tag.objects.get_or_create(name=tag)[0]
+            print(tag)
+            ans.tags.add(new)
+            ans.save()
+        return self
+
+
 
 class SettingsForm(forms.ModelForm):
     avatar = forms.FileField(widget=forms.FileInput(attrs={"class": "form-group mb-3"}), label="Avatar", required=False)

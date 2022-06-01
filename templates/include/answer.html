@@ -21,7 +21,7 @@
         <p></p>
 
         <form class="mb-1">
-            {% if request.user.profile_related == answer.author %}
+            {% if answer.question.author == request.user.profile_related %}
             {% csrf_token %}
                 <button type="button" class="btn btn-outline-primary correct-answer"
                         data-id="{{ answer.id }}">{{ answer.correct }}</button>
@@ -40,7 +40,7 @@
 
             <div class="col-7">
                 <b>Tags:</b> &nbsp<a
-                    {% for tag in question.tags.all %}
+                    {% for tag in answer.tags.all %}
                         {% include "include/tags.html" %}
                     {% endfor %}
                 </a>
@@ -50,6 +50,6 @@
 
 
     <div class="row text-center">
-         <a class="btn"> <b>Date:</b>&nbsp{{ question.pub_date }}</a>
+         <a class="btn"> <b>Date:</b>&nbsp{{ answer.pub_date }}</a>
     </div>
 </div>

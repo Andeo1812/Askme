@@ -42,39 +42,28 @@ def hot(request):
 @require_http_methods(["GET", "POST"])
 def question(request, question_id):
     cache.set(REDIRECT_FIELD_NAME, request.path)
-    if request.method == 'POST':
-        form = AnswerForm(data=request.POST)
-        if form.is_valid():
-            ans = form.save(commit=False)
-            ans.author = Profile.objects.get(user=request.user)
-            ans.question = Question.objects.get(id=question_id)
-            ans.save()
-            for tag in form.cleaned_data['tag_list'].split():
-                new = Tag.objects.get_or_create(name=tag)[0]
-                ans.tags.add(new)
-            ans.save()
-            return redirect("question", question_id=question_id)
-    else:
-        try:
-            question = Question.objects.get_by_id(question_id)
-            answers = Answer.objects.answer_by_question(question_id)
-        except Exception:
-            return render(request, 'not_found.html', {"hot_page": "Best questions",
-                                                      "new_page": "New questions",
-                                                      "popular_tags": top_tags,
-                                                      'best_members': users
-                                                      })
-        else:
-            form = AnswerForm()
-            content = paginator.paginate(answers, request, 5)
-    content.update({'question': question,
+    if request.method == "GET":
+        question = Question.objects.get_by_id(question_id)
+        answers = Answer.objects.answer_by_question(question_id)
+        form = AnswerForm()
+        content = paginator.paginate(answers, request, 5)
+        content.update({'question': question,
                     "one_question:": "yes",
-                    'popular_tags': top_tags,
+                    "popular_tags": top_tags,
                     'answers': paginator.paginate(answers, request, 5),
                     'best_members': users,
-                    "form": form
-                    })
-    return render(request, "question_page.html", content)
+                    "form": form})
+        return render(request, "question_page.html", content)
+    elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            next = f"/question/{question_id}"
+            return redirect("login")
+        form = AnswerForm(data=request.POST)
+        if form.is_valid():
+            author = Profile.objects.get(user=request.user)
+            question = Question.objects.get(id=question_id)
+            form.save(author, question)
+            return redirect("question", question_id=question_id)
 
 
 def tag(request, tag):
@@ -230,7 +219,7 @@ def dislike_answer(request):
 def correct_answer(request):
     answer_id = request.POST['answer_id']
     answer = Answer.objects.get(id=answer_id)
-    if answer.question == request.user.profile_related:
+    if answer.question.author == request.user.profile_related:
         answer.correct_input()
         if (answer.correct):
             return JsonResponse({'correct': 'True'})
