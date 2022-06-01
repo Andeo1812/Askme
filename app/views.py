@@ -50,7 +50,7 @@ def question(request, question_id):
             return render(request, 'not_found.html', {"hot_page": "Best questions",
                                                       "new_page": "New questions",
                                                       "popular_tags": top_tags,
-                                                      'top_users': users,
+                                                      'best_members': users,
                                                       })
         else:
             form = AnswerForm()
@@ -59,7 +59,7 @@ def question(request, question_id):
                             "one_question:": "yes",
                             'popular_tags': top_tags,
                             'answers': paginator.paginate(answers, request, 5),
-                            'top_users': users,
+                            'best_members': users,
                             "form": form
                             })
         return render(request, "question_page.html", content)
