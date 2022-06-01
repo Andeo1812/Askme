@@ -20,7 +20,6 @@
 
         <p></p>
 
-        <form class="mb-1">
             {% if answer.question.author == request.user.profile_related %}
             {% csrf_token %}
                 <button type="button" class="btn btn-outline-primary correct-answer"
