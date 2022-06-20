@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 from django.db.models import Count, Sum
 from django.utils import timezone
 
-import heapq
-
 
 class TagManager(models.Manager):
     def top_tags(self, count=5):
