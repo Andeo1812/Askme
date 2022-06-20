@@ -3,4 +3,5 @@ tmp/
 db.sqlite3
 venv/
 Askme/__pycache__/
-__pucache__
+__pycache__
+*__pycache__*
